@@ -21,7 +21,7 @@ You must respond in the following JSON format:
 {
   "isCorrect": boolean,
   "markedText": string | null,  // Original text with errors marked using *** ***. Only present if isCorrect is false
-  "explanations": string[] | null,  // Array of explanations, each starting with "explanation-". Only present if isCorrect is false
+  "explanations": string[] | null,  // Array of explanations, numbered as "1. ", "2. ", etc. Only present if isCorrect is false
   "correctedText": string | null  // The corrected version of the text. Only present if isCorrect is false
 }
 
@@ -31,8 +31,9 @@ Rules:
    - All other fields should be null
 2. If the grammar is incorrect:
    - Set "isCorrect": false
-   - Mark errors in markedText with *** ***
-   - Each explanation in explanations array must start with "explanation-"
+   - Mark each error in markedText with *** ***
+   - Each explanation in explanations array should be numbered (e.g. "1. This is wrong", "2. That is incorrect")
+   - Number of explanations should match number of errors marked in markedText
    - Provide the corrected version in correctedText
 3. Do not include any additional text or formatting outside of this JSON structure.`
     },
@@ -98,12 +99,15 @@ function extractErrors(markedText: string, explanations: string[]) {
     const start = markedText.indexOf(match[0], index);
     const end = start + match[0].length;
     
+    // Find the corresponding explanation for this error
+    const explanation: string = explanations[errors.length] || 'Grammar error';
+    
     errors.push({
       text: errorText,
       start,
       end,
       severity: 'error',
-      message: explanations[errors.length] || 'Grammar error'
+      message: explanation // Keep the number prefix
     });
     
     index = end;
@@ -166,11 +170,15 @@ export async function POST(request: NextRequest) {
     console.log('Parsed JSON:', JSON.stringify(llmResponse, null, 2));
     console.log('\n=== Processing Results ===');
     
+    // Ensure explanations is always an array
+    const explanations = llmResponse.isCorrect ? [] : (llmResponse.explanations || []);
+    
     const result = {
       text: llmResponse.isCorrect ? "✓" : llmResponse.markedText,
       isCorrect: llmResponse.isCorrect,
-      errors: llmResponse.isCorrect ? [] : extractErrors(llmResponse.markedText, llmResponse.explanations),
-      correctedText: llmResponse.correctedText
+      errors: llmResponse.isCorrect ? [] : extractErrors(llmResponse.markedText, explanations),
+      correctedText: llmResponse.correctedText,
+      explanations: explanations // Add explanations to the response
     };
     
     console.log('Final processed result:', JSON.stringify(result, null, 2));
