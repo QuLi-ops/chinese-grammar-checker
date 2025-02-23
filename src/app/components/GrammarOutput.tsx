@@ -3,7 +3,7 @@
 import React from 'react';
 import VoiceOutput from './VoiceOutput';
 
-interface ErrorMark {
+interface Error {
   start: number;
   end: number;
   severity: 'low' | 'medium' | 'high';
@@ -13,7 +13,7 @@ interface ErrorMark {
 interface GrammarOutputProps {
   text: string;
   isCorrect: boolean;
-  errors?: ErrorMark[];
+  errors?: Error[];
   correctedText?: string;
 }
 
