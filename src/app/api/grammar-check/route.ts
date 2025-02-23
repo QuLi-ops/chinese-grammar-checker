@@ -12,16 +12,29 @@ function constructPrompt(
   return [
     {
       role: 'system',
-      content: `Always respond in ${responseLanguage}. User's text is ${style} style.
-You are only allowed to respond with the REQUIREMENT which is what I want you to respond with.
+      content: `You are a grammar checking assistant. Each response should be completely independent and not reference any previous conversations or context.
+Treat each input as a new, standalone request.
+Always respond in ${responseLanguage}. But every section that repeat the user's text should be the language that is user's text.
+User's text is ${style} style.
 
-Here are the REQUIREMENTS:
-1.If the gremmar of the text is correct, you should only respond with "Correct".
-2.If the gremmar of the text is incorrect, you should:
-- repeat the whole text and mark the errors with "*** ***"
-- use explanation-1/2/3... to explain the errors and say "explanation-1/explanation-2/explanation-3" in every first of explanation section.
-- writing the corrected text that has been fixed.and say "CorrectedText" in the first of corrected text section.
-3.use "---" to separate every section.`,
+You must respond in the following JSON format:
+{
+  "isCorrect": boolean,
+  "markedText": string | null,  // Original text with errors marked using *** ***. Only present if isCorrect is false
+  "explanations": string[] | null,  // Array of explanations, each starting with "explanation-". Only present if isCorrect is false
+  "correctedText": string | null  // The corrected version of the text. Only present if isCorrect is false
+}
+
+Rules:
+1. If the grammar is correct:
+   - Set "isCorrect": true
+   - All other fields should be null
+2. If the grammar is incorrect:
+   - Set "isCorrect": false
+   - Mark errors in markedText with *** ***
+   - Each explanation in explanations array must start with "explanation-"
+   - Provide the corrected version in correctedText
+3. Do not include any additional text or formatting outside of this JSON structure.`
     },
     {
       role: 'user',
@@ -74,6 +87,31 @@ function parseResponse(content: string) {
   };
 }
 
+function extractErrors(markedText: string, explanations: string[]) {
+  const errors = [];
+  const regex = /\*\*\*(.*?)\*\*\*/g;
+  let match;
+  let index = 0;
+  
+  while ((match = regex.exec(markedText)) !== null) {
+    const errorText = match[1];
+    const start = markedText.indexOf(match[0], index);
+    const end = start + match[0].length;
+    
+    errors.push({
+      text: errorText,
+      start,
+      end,
+      severity: 'error',
+      message: explanations[errors.length] || 'Grammar error'
+    });
+    
+    index = end;
+  }
+  
+  return errors;
+}
+
 export async function POST(request: NextRequest) {
   if (!OPENROUTER_API_KEY) {
     return NextResponse.json(
@@ -93,36 +131,56 @@ export async function POST(request: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'HTTP-Referer': 'https://github.com/your-username/chinese-grammar-checker',
-        'X-Title': 'Chinese Grammar Checker',
       },
       body: JSON.stringify({
-        model: 'google/gemma-2-9b-it:free',
+        model: 'openai/gpt-4o-2024-08-06',
         messages,
-        temperature: 0.1, // 降低随机性
-        top_p: 0.1, // 降低输出多样性
-        frequency_penalty: 0, // 不惩罚频繁词
-        presence_penalty: 0, // 不惩罚主题重复
-        seed: 42, // 固定随机种子
+        top_p: 1,
+        temperature: 0.67,
+        repetition_penalty: 1,
+        response_format: { "type": "json_object" }
       }),
     });
 
     if (!response.ok) {
-      throw new Error('OpenRouter API request failed');
+      throw new Error('API request to OpenRouter failed');
     }
 
     const data = await response.json();
     console.log('Complete AI Response:', data);
-    console.log('AI Message Content:', data.choices[0].message.content);
+    console.log('\n=== AI Response Details ===');
+    console.log('Raw response:', data.choices[0].message.content);
+    console.log('\n=== Parsed Response ===');
     
-    const llmResponse = data.choices[0].message.content;
-    const result = parseResponse(llmResponse);
+    if (!data.choices || !Array.isArray(data.choices) || data.choices.length === 0) {
+      console.error('Invalid response format - missing choices array:', data);
+      throw new Error('Invalid response format');
+    }
 
+    if (!data.choices[0].message || typeof data.choices[0].message.content !== 'string') {
+      console.error('Invalid message format in response:', data.choices[0]);
+      throw new Error('Invalid message format');
+    }
+
+    const llmResponse = JSON.parse(data.choices[0].message.content);
+    console.log('Parsed JSON:', JSON.stringify(llmResponse, null, 2));
+    console.log('\n=== Processing Results ===');
+    
+    const result = {
+      text: llmResponse.isCorrect ? "✓" : llmResponse.markedText,
+      isCorrect: llmResponse.isCorrect,
+      errors: llmResponse.isCorrect ? [] : extractErrors(llmResponse.markedText, llmResponse.explanations),
+      correctedText: llmResponse.correctedText
+    };
+    
+    console.log('Final processed result:', JSON.stringify(result, null, 2));
+    console.log('===============================\n');
+    
     return NextResponse.json(result);
   } catch (error) {
-    console.error('Grammar check error:', error);
+    console.error('Error during grammar check:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'An error occurred while processing your request' },
       { status: 500 }
     );
   }
