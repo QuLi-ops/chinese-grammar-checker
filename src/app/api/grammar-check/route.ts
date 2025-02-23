@@ -133,12 +133,11 @@ export async function POST(request: NextRequest) {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'openai/gpt-4o-2024-08-06',
+        model: 'anthropic/claude-3.5-haiku-20241022',
         messages,
+        response_format: { "type": "json_object" },
         top_p: 1,
-        temperature: 0.67,
         repetition_penalty: 1,
-        response_format: { "type": "json_object" }
       }),
     });
 
@@ -147,10 +146,8 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
-    console.log('Complete AI Response:', data);
     console.log('\n=== AI Response Details ===');
-    console.log('Raw response:', data.choices[0].message.content);
-    console.log('\n=== Parsed Response ===');
+    console.log('Complete AI Response:', data);
     
     if (!data.choices || !Array.isArray(data.choices) || data.choices.length === 0) {
       console.error('Invalid response format - missing choices array:', data);
@@ -161,6 +158,9 @@ export async function POST(request: NextRequest) {
       console.error('Invalid message format in response:', data.choices[0]);
       throw new Error('Invalid message format');
     }
+
+    console.log('Raw response:', data.choices[0].message.content);
+    console.log('\n=== Parsed Response ===');
 
     const llmResponse = JSON.parse(data.choices[0].message.content);
     console.log('Parsed JSON:', JSON.stringify(llmResponse, null, 2));
