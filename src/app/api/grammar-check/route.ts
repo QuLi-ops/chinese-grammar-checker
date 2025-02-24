@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'anthropic/claude-3.5-haiku-20241022',
+        model: 'deepseek/deepseek-chat',
         messages,
         response_format: { "type": "json_object" },
         temperature: 0.3,
