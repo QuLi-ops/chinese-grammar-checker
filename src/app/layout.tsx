@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GoogleAnalytics } from '@next/third-parties/google'
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,14 +14,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Chinese Grammar Checker - Professional Chinese Writing Assistant",
+  metadataBase: new URL('https://chinesegrammarchecker.com'),
+  applicationName: 'Language Grammar Checker',
+  title: "Chinese Grammar Checker with AI - Professional Chinese Writing Assistant",
   description: "Free online Chinese grammar checker. Advanced AI-powered tool for checking Chinese grammar, style, and tone. Perfect for students, professionals, and Chinese learners.",
-  keywords: "Chinese Grammar Checker, Chinese Writing Assistant, Chinese Language Tool, Chinese Grammar Correction, Chinese Writing Helper, Learn Chinese, Chinese Grammar Rules, Chinese Language Learning",
   openGraph: {
-    title: "Chinese Grammar Checker - Professional Chinese Writing Assistant",
+    siteName: 'Chinese Grammar Checker',
+    title: "Chinese Grammar Checker with AI - Professional Chinese Writing Assistant",
     description: "Advanced AI-powered Chinese grammar checking tool. Perfect for students, professionals, and Chinese learners.",
     type: "website",
     locale: "en_US",
+    url: 'https://chinesegrammarchecker.com',
     images: [
       {
         url: "/og-image.png",
@@ -32,9 +36,12 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Chinese Grammar Checker - Professional Chinese Writing Assistant",
+    title: "Chinese Grammar Checker with AI - Professional Chinese Writing Assistant",
     description: "Advanced AI-powered Chinese grammar checking tool. Perfect for students, professionals, and Chinese learners.",
   },
+  alternates: {
+    canonical: 'https://chinesegrammarchecker.com'
+  }
 };
 
 export default function RootLayout({
@@ -48,6 +55,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <GoogleAnalytics gaId="G-FWFPJ6YBJZ" />
       </body>
     </html>
   );
