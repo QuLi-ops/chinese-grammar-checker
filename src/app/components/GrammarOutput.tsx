@@ -11,7 +11,8 @@ interface Error {
   start: number;
   end: number;
   severity: 'low' | 'medium' | 'high';
-  message: string;
+  message: string[];
+  id: number;
 }
 
 interface GrammarOutputProps {
@@ -19,7 +20,7 @@ interface GrammarOutputProps {
   isCorrect: boolean;
   errors?: Error[];
   correctedText?: string;
-  explanations?: string[];
+  explanations?: { [key: string]: string[] };
 }
 
 const GrammarOutput: React.FC<GrammarOutputProps> = ({
@@ -27,7 +28,7 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
   isCorrect,
   errors = [],
   correctedText,
-  explanations = [],
+  explanations = {},
 }) => {
   const renderText = () => {
     if (isCorrect) {
@@ -59,11 +60,13 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
     const sortedErrors = [...errors].sort((a, b) => a.start - b.start);
 
     sortedErrors.forEach((error) => {
+      // 添加错误前的正常文本
       if (error.start > lastIndex) {
         segments.push({
           text: text.slice(lastIndex, error.start),
         });
       }
+      // 添加错误文本
       segments.push({
         text: text.slice(error.start, error.end),
         isError: true,
@@ -72,6 +75,7 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
       lastIndex = error.end;
     });
 
+    // 添加最后一段正常文本
     if (lastIndex < text.length) {
       segments.push({
         text: text.slice(lastIndex),
@@ -98,11 +102,16 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
                 "relative inline-block group cursor-help border-b-2",
                 severityColors[segment.error!.severity]
               )}
+              title={segment.error!.message[0]}
             >
               {segment.text}
-              <div className="invisible group-hover:visible absolute z-[100] -top-2 left-1/2 transform -translate-x-1/2 -translate-y-full">
-                <div className="relative px-2 py-1 bg-popover text-popover-foreground text-sm rounded shadow-lg whitespace-nowrap">
-                  {segment.error!.message}
+              <div className="invisible group-hover:visible absolute z-[100] -top-2 left-1/2 transform -translate-x-1/2 -translate-y-full min-w-[200px]">
+                <div className="relative px-3 py-2 bg-popover text-popover-foreground text-sm rounded shadow-lg">
+                  {segment.error!.message.map((msg, idx) => (
+                    <div key={idx} className={idx > 0 ? "mt-1 text-sm opacity-80" : ""}>
+                      {msg}
+                    </div>
+                  ))}
                   <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-popover rotate-45"></div>
                 </div>
               </div>
@@ -138,19 +147,23 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
             />
           </div>
 
-          {!isCorrect && explanations && explanations.length > 0 && (
+          {!isCorrect && explanations && Object.keys(explanations).length > 0 && (
             <div>
               <CardTitle className="mb-4">Grammar Explanations</CardTitle>
               <ScrollArea className="p-4 bg-blue-50 dark:bg-blue-950 rounded-md max-h-[300px]">
                 <ul className="space-y-3 text-blue-800 dark:text-blue-200">
-                  {explanations.map((explanation, index) => (
-                    <li key={index} className="flex items-start space-x-2">
+                  {Object.entries(explanations).map(([id, explanationArray]) => (
+                    <li key={id} className="flex items-start space-x-2">
                       <Badge variant="outline" className="mt-1 shrink-0">
-                        {index + 1}
+                        {id}
                       </Badge>
-                      <span className="leading-relaxed">
-                        {removeNumberPrefix(explanation)}
-                      </span>
+                      <div className="leading-relaxed">
+                        {explanationArray.map((explanation, index) => (
+                          <div key={index} className={index > 0 ? "mt-1 text-sm opacity-80" : ""}>
+                            {explanation}
+                          </div>
+                        ))}
+                      </div>
                     </li>
                   ))}
                 </ul>

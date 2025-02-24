@@ -22,7 +22,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold mb-6">Why Use Our Chinese Grammar Checker?</h2>
             <p className="text-gray-700 leading-relaxed">
               Our chinese grammar checker is an advanced tool designed to help you write better Chinese. 
-              Whether you're a student learning Chinese, a professional writing business documents, or 
+              Whether you&apos;re a student learning Chinese, a professional writing business documents, or 
               someone looking to improve their Chinese writing skills, our tool provides comprehensive 
               grammar checking and suggestions. As the most reliable chinese grammar checker available online,
               we focus on providing accurate, context-aware corrections for all your Chinese writing needs.
@@ -236,7 +236,7 @@ export default function Home() {
           <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-8 rounded-xl shadow-sm">
             <h2 className="text-3xl font-bold mb-6">Start Writing Better Chinese Today</h2>
             <p className="text-lg leading-relaxed mb-8">
-              Whether you're writing an essay, preparing a business document, or learning Chinese, 
+              Whether you&apos;re writing an essay, preparing a business document, or learning Chinese, 
               our chinese grammar checker is here to help. Try our chinese grammar checker now 
               and experience the difference in your Chinese writing quality.
             </p>

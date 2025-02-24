@@ -12,7 +12,8 @@ export interface GrammarError {
   start: number;
   end: number;
   severity: ErrorSeverity;
-  message: string;
+  message: string[];
+  id: number;
 }
 
 export interface APIResponse {
@@ -20,5 +21,5 @@ export interface APIResponse {
   isCorrect: boolean;
   errors?: GrammarError[];
   correctedText?: string;
-  explanations?: string[];
+  explanations?: { [key: string]: string[] };
 } 

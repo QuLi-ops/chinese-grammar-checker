@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useGrammarCheck } from '../hooks/useGrammarCheck';
 import GrammarOutput from './GrammarOutput';
-import { ResponseLanguage, InputType, LanguageStyle, APIResponse } from '../types/grammar';
+import { ResponseLanguage, InputType, LanguageStyle } from '../types/grammar';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
