@@ -2,6 +2,10 @@
 
 import React from 'react';
 import VoiceOutput from './VoiceOutput';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Error {
   start: number;
@@ -28,7 +32,7 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
   const renderText = () => {
     if (isCorrect) {
       return (
-        <div className="flex items-center text-green-600">
+        <div className="flex items-center text-emerald-600 dark:text-emerald-400">
           <svg
             className="w-6 h-6 mr-2"
             fill="none"
@@ -47,122 +51,132 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
       );
     }
 
-    let result = [];
+    // 将文本分割成错误和非错误部分
+    const segments: { text: string; isError?: boolean; error?: Error }[] = [];
     let lastIndex = 0;
 
-    errors.forEach((error, index) => {
-      // Add text before error
+    // 按位置排序错误
+    const sortedErrors = [...errors].sort((a, b) => a.start - b.start);
+
+    sortedErrors.forEach((error) => {
       if (error.start > lastIndex) {
-        result.push(
-          <span key={`text-${index}`}>
-            {text.slice(lastIndex, error.start)}
-          </span>
-        );
+        segments.push({
+          text: text.slice(lastIndex, error.start),
+        });
       }
-
-      // Add error text
-      const severityColors = {
-        low: 'bg-yellow-100 border-yellow-400',
-        medium: 'bg-orange-100 border-orange-400',
-        high: 'bg-red-100 border-red-400',
-      };
-
-      result.push(
-        <span
-          key={`error-${index}`}
-          className={`relative group cursor-help ${severityColors[error.severity]} border-b-2`}
-        >
-          {text.slice(error.start, error.end)}
-          <span className="invisible group-hover:visible absolute bottom-full left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-sm rounded whitespace-nowrap">
-            {error.message}
-          </span>
-        </span>
-      );
-
+      segments.push({
+        text: text.slice(error.start, error.end),
+        isError: true,
+        error,
+      });
       lastIndex = error.end;
     });
 
-    // Add remaining text
     if (lastIndex < text.length) {
-      result.push(
-        <span key="text-final">{text.slice(lastIndex)}</span>
-      );
+      segments.push({
+        text: text.slice(lastIndex),
+      });
     }
 
-    return result;
+    return (
+      <div className="relative inline">
+        {segments.map((segment, index) => {
+          if (!segment.isError) {
+            return <span key={index}>{segment.text}</span>;
+          }
+
+          const severityColors = {
+            low: 'bg-yellow-100 dark:bg-yellow-900 border-yellow-400',
+            medium: 'bg-orange-100 dark:bg-orange-900 border-orange-400',
+            high: 'bg-red-100 dark:bg-red-900 border-red-400',
+          };
+
+          return (
+            <span
+              key={index}
+              className={cn(
+                "relative inline-block group cursor-help border-b-2",
+                severityColors[segment.error!.severity]
+              )}
+            >
+              {segment.text}
+              <div className="invisible group-hover:visible absolute z-[100] -top-2 left-1/2 transform -translate-x-1/2 -translate-y-full">
+                <div className="relative px-2 py-1 bg-popover text-popover-foreground text-sm rounded shadow-lg whitespace-nowrap">
+                  {segment.error!.message}
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-popover rotate-45"></div>
+                </div>
+              </div>
+            </span>
+          );
+        })}
+      </div>
+    );
+  };
+
+  // 移除序号前缀的函数
+  const removeNumberPrefix = (text: string) => {
+    return text.replace(/^\d+\.\s*/, '');
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Check Results
-          </h3>
-          <div className="p-4 bg-gray-50 rounded-md">
-            {renderText()}
-          </div>
-          <VoiceOutput
-            text={text}
-            language="zh-CN"
-            isEnabled={false}
-          />
-        </div>
-
-        {!isCorrect && explanations && explanations.length > 0 && (
+    <div className="w-full max-w-2xl mx-auto mt-8">
+      <Card>
+        <CardHeader>
+          <CardTitle>Check Results</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
           <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Grammar Explanations
-            </h3>
-            <div className="p-4 bg-blue-50 rounded-md">
-              <ul className="space-y-2 text-blue-800">
-                {explanations.map((explanation, index) => (
-                  <li key={index} className="leading-relaxed">
-                    {explanation}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
-
-        {!isCorrect && correctedText && (
-          <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Suggested Corrections
-            </h3>
-            <div className="p-4 bg-green-50 rounded-md text-green-700">
-              {correctedText}
+            <div className="relative p-4 bg-muted rounded-md">
+              <div className="text-lg leading-relaxed overflow-visible">
+                {renderText()}
+              </div>
             </div>
             <VoiceOutput
-              text={correctedText}
+              text={text}
               language="zh-CN"
               isEnabled={false}
             />
           </div>
-        )}
 
-        {/* Temporarily commented out severity indicators
-        {!isCorrect && errors.length > 0 && (
-          <div className="mt-4">
-            <div className="flex space-x-4">
-              <div className="flex items-center">
-                <span className="w-3 h-3 bg-yellow-100 border border-yellow-400 rounded-full mr-2"></span>
-                <span className="text-sm text-gray-600">Minor Error</span>
-              </div>
-              <div className="flex items-center">
-                <span className="w-3 h-3 bg-orange-100 border border-orange-400 rounded-full mr-2"></span>
-                <span className="text-sm text-gray-600">Moderate Error</span>
-              </div>
-              <div className="flex items-center">
-                <span className="w-3 h-3 bg-red-100 border border-red-400 rounded-full mr-2"></span>
-                <span className="text-sm text-gray-600">Severe Error</span>
-              </div>
+          {!isCorrect && explanations && explanations.length > 0 && (
+            <div>
+              <CardTitle className="mb-4">Grammar Explanations</CardTitle>
+              <ScrollArea className="p-4 bg-blue-50 dark:bg-blue-950 rounded-md max-h-[300px]">
+                <ul className="space-y-3 text-blue-800 dark:text-blue-200">
+                  {explanations.map((explanation, index) => (
+                    <li key={index} className="flex items-start space-x-2">
+                      <Badge variant="outline" className="mt-1 shrink-0">
+                        {index + 1}
+                      </Badge>
+                      <span className="leading-relaxed">
+                        {removeNumberPrefix(explanation)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </ScrollArea>
             </div>
-          </div>
-        )}
-        */}
-      </div>
+          )}
+
+          {!isCorrect && correctedText && (
+            <div>
+              <CardTitle className="mb-4">Suggested Corrections</CardTitle>
+              <div className="p-4 bg-emerald-50 dark:bg-emerald-950 rounded-md text-emerald-700 dark:text-emerald-200">
+                <ScrollArea className="max-h-[200px]">
+                  <div className="text-lg leading-relaxed">
+                    {correctedText}
+                  </div>
+                </ScrollArea>
+              </div>
+              <VoiceOutput
+                text={correctedText}
+                language="zh-CN"
+                isEnabled={false}
+              />
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };
