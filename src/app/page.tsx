@@ -45,7 +45,7 @@ export default function Home() {
             </li>
           </ul>
 
-          <h3>Common Chinese Grammar Challenges</h3>
+          <h2>Common Chinese Grammar Challenges</h2>
           <p>
             Writing in Chinese presents unique challenges that our grammar checker helps you overcome:
           </p>
@@ -55,7 +55,143 @@ export default function Home() {
             <li>Appropriate particle usage (了, 过, 着)</li>
             <li>Complex character combinations</li>
             <li>Formal vs. informal expression</li>
+            <li>Time expressions and word order</li>
+            <li>Proper use of 的, 地, and 得</li>
+            <li>Complement usage (结果补语, 趋向补语, etc.)</li>
+            <li>Topic-comment structure</li>
+            <li>Serial verb constructions</li>
           </ul>
+
+          <h3>Detailed Grammar Points</h3>
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-bold">Word Order (语序)</h4>
+              <p>
+                Chinese follows the SVO (Subject-Verb-Object) structure, but with important variations:
+                - Time expressions typically come before the subject
+                - Location phrases usually precede the verb
+                - Modifiers must come before the word they modify
+                - Multiple adjectives follow a specific order
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="font-bold">Measure Words (量词)</h4>
+              <p>
+                Measure words are essential in Chinese and must match their nouns correctly:
+                - 个 (gè) for general objects
+                - 本 (běn) for books
+                - 张 (zhāng) for flat objects
+                - 条 (tiáo) for long, thin objects
+                - 位 (wèi) for respected persons
+                Our checker helps you choose the right measure word for each context.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-bold">Aspect Particles (动态助词)</h4>
+              <p>
+                Chinese uses particles to indicate the state or progress of actions:
+                - 了 (le) for completed actions or change of state
+                - 过 (guo) for past experience
+                - 着 (zhe) for continuous actions
+                Understanding when and how to use these particles is crucial for natural expression.
+              </p>
+            </div>
+          </div>
+
+          <h3>Advanced Writing Techniques</h3>
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-bold">Formal Writing (书面语)</h4>
+              <p>
+                Formal Chinese writing requires specific considerations:
+                - Use of literary expressions (成语)
+                - Appropriate honorific terms
+                - Complex sentence structures
+                - Professional vocabulary
+                - Proper paragraph organization
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-bold">Business Chinese (商务中文)</h4>
+              <p>
+                Business communication in Chinese has its own conventions:
+                - Standard greeting and closing formulas
+                - Proper titles and forms of address
+                - Formal vocabulary choices
+                - Appropriate level of politeness
+                - Clear paragraph structure
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-bold">Academic Writing (学术写作)</h4>
+              <p>
+                Academic Chinese requires:
+                - Objective tone
+                - Proper citation formats
+                - Technical vocabulary
+                - Logical argument structure
+                - Clear thesis statements
+              </p>
+            </div>
+          </div>
+
+          <h3>Common Mistakes and Solutions</h3>
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-bold">Word Choice Errors</h4>
+              <p>
+                Common word choice mistakes include:
+                - Confusing similar characters (近义词)
+                - Inappropriate register selection
+                - Incorrect synonym usage
+                - Misused idioms
+                Our system helps identify and correct these issues.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-bold">Structural Errors</h4>
+              <p>
+                Watch out for these structural mistakes:
+                - Incorrect topic-comment structure
+                - Misplaced modifiers
+                - Wrong complement usage
+                - Improper clause ordering
+                Our checker provides clear explanations for structural corrections.
+              </p>
+            </div>
+          </div>
+
+          <h3>Writing Style Guidelines</h3>
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-bold">Coherence and Cohesion</h4>
+              <p>
+                Maintain text flow with:
+                - Appropriate conjunctions
+                - Logical transitions
+                - Consistent terminology
+                - Clear paragraph structure
+                - Proper topic progression
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-bold">Tone and Register</h4>
+              <p>
+                Adapt your writing style to:
+                - Audience expectations
+                - Document purpose
+                - Social context
+                - Professional requirements
+                - Cultural considerations
+              </p>
+            </div>
+          </div>
 
           <h3>How It Works</h3>
           <ol>
@@ -124,6 +260,111 @@ export default function Home() {
             our grammar checker is here to help. Try it now and experience the difference in 
             your Chinese writing quality.
           </p>
+
+          <h2>Learning Resources and Tips</h2>
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-bold">Effective Learning Strategies</h4>
+              <p>
+                Improve your Chinese writing with these methods:
+                - Regular practice with feedback
+                - Reading authentic materials
+                - Studying example sentences
+                - Using context-based learning
+                - Practicing with native speakers
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-bold">Online Learning Tools</h4>
+              <p>
+                Enhance your learning with:
+                - Grammar checking tools
+                - Online dictionaries
+                - Language exchange platforms
+                - Chinese learning apps
+                - Video learning resources
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-bold">Writing Practice Tips</h4>
+              <p>
+                Develop your writing skills through:
+                - Daily journal writing
+                - Email correspondence
+                - Social media posts
+                - Blog writing
+                - Creative writing exercises
+              </p>
+            </div>
+          </div>
+
+          <h3>Special Writing Scenarios</h3>
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-bold">Social Media Writing</h4>
+              <p>
+                Tips for social media content:
+                - Appropriate hashtag usage
+                - Trendy expressions
+                - Internet slang awareness
+                - Platform-specific style
+                - Engagement techniques
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-bold">Creative Writing</h4>
+              <p>
+                Enhance your creative writing with:
+                - Descriptive language
+                - Character development
+                - Story structure
+                - Dialogue writing
+                - Scene setting
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-bold">Technical Writing</h4>
+              <p>
+                Guidelines for technical documents:
+                - Clear terminology
+                - Structured format
+                - Precise instructions
+                - Visual aids
+                - Reference standards
+              </p>
+            </div>
+          </div>
+
+          <h3>Cultural Considerations</h3>
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-bold">Regional Differences</h4>
+              <p>
+                Understanding variations in:
+                - Mainland China usage
+                - Taiwan usage
+                - Hong Kong usage
+                - Singapore usage
+                - Overseas Chinese communities
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-bold">Cultural Context</h4>
+              <p>
+                Important cultural aspects:
+                - Face and politeness
+                - Hierarchical relationships
+                - Business etiquette
+                - Social customs
+                - Traditional values
+              </p>
+            </div>
+          </div>
         </section>
 
         <footer className="mt-16 text-center text-gray-600">
