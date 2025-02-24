@@ -20,28 +20,29 @@ export default function Home() {
         <section className="mt-16 prose prose-lg mx-auto">
           <h2>Why Use Our Chinese Grammar Checker?</h2>
           <p>
-            Our Chinese Grammar Checker is an advanced tool designed to help you write better Chinese. 
+            Our chinese grammar checker is an advanced tool designed to help you write better Chinese. 
             Whether you're a student learning Chinese, a professional writing business documents, or 
             someone looking to improve their Chinese writing skills, our tool provides comprehensive 
-            grammar checking and suggestions.
+            grammar checking and suggestions. As the most reliable chinese grammar checker available online,
+            we focus on providing accurate, context-aware corrections for all your Chinese writing needs.
           </p>
 
-          <h3>Key Features</h3>
+          <h3>Key Features of Our Chinese Grammar Checker</h3>
           <ul>
             <li>
-              <strong>Real-time Grammar Checking:</strong> Instantly identify grammar mistakes as you type
+              <strong>Real-time Grammar Checking:</strong> Our chinese grammar checker instantly identifies grammar mistakes as you type
             </li>
             <li>
-              <strong>Contextual Corrections:</strong> Get suggestions that consider the context of your writing
+              <strong>Contextual Corrections:</strong> Unlike basic grammar checkers, our chinese grammar checker provides suggestions that consider the full context of your writing
             </li>
             <li>
-              <strong>Style Recommendations:</strong> Choose between formal and informal writing styles
+              <strong>Style Recommendations:</strong> The chinese grammar checker adapts to your chosen style, whether formal or informal
             </li>
             <li>
-              <strong>Detailed Explanations:</strong> Learn from your mistakes with clear, educational explanations
+              <strong>Detailed Explanations:</strong> Each correction comes with clear, educational explanations to help you understand the rules
             </li>
             <li>
-              <strong>Voice Output:</strong> Listen to the correct pronunciation of your text
+              <strong>Voice Output:</strong> Hear the correct pronunciation of your text with our integrated audio feature
             </li>
           </ul>
 
@@ -193,13 +194,16 @@ export default function Home() {
             </div>
           </div>
 
-          <h3>How It Works</h3>
+          <h2>How Our Chinese Grammar Checker Works</h2>
+          <p>
+            The Chinese Grammar Checker uses advanced AI technology to analyze your text:
+          </p>
           <ol>
-            <li>Enter your Chinese text in the input box</li>
-            <li>Select your preferred response language (Chinese or English)</li>
-            <li>Choose your writing style (formal or informal)</li>
-            <li>Click "Check Grammar" to receive instant feedback</li>
-            <li>Review the detailed corrections and explanations</li>
+            <li>Enter your Chinese text into our professional Chinese Grammar Checker</li>
+            <li>Select your preferred response language (Chinese or English) for explanations</li>
+            <li>Choose your writing style (formal or informal) for context-appropriate suggestions</li>
+            <li>Let our Chinese Grammar Checker analyze your text and provide instant feedback</li>
+            <li>Review the detailed corrections and educational explanations</li>
           </ol>
 
           <h2>Tips for Better Chinese Writing</h2>
@@ -214,64 +218,77 @@ export default function Home() {
             <li>Study the differences between formal and informal Chinese</li>
           </ul>
 
-          <h2>Who Can Benefit?</h2>
+          <h2>Who Can Benefit from our Chinese Grammar Checker?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
             <div className="bg-white p-6 rounded-lg shadow">
               <h4 className="font-bold mb-2">Students</h4>
-              <p>Perfect for homework, essays, and academic writing in Chinese</p>
+              <p>Use our chinese grammar checker for homework, essays, and academic writing in Chinese</p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow">
               <h4 className="font-bold mb-2">Professionals</h4>
-              <p>Ideal for business communications and formal documents</p>
+              <p>Our chinese grammar checker is ideal for business communications and formal documents</p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow">
               <h4 className="font-bold mb-2">Language Learners</h4>
-              <p>Essential tool for improving Chinese writing skills</p>
+              <p>Make our chinese grammar checker your essential tool for improving Chinese writing skills</p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow">
               <h4 className="font-bold mb-2">Content Creators</h4>
-              <p>Valuable for creating accurate Chinese content</p>
+              <p>Rely on our chinese grammar checker for creating accurate Chinese content</p>
             </div>
           </div>
 
-          <h2>Frequently Asked Questions</h2>
+          <h2>Frequently Asked Questions About our Chinese Grammar Checker</h2>
           <div className="space-y-6">
             <div>
-              <h4 className="font-bold">Is this grammar checker free to use?</h4>
-              <p>Yes, our basic grammar checking features are completely free to use.</p>
+              <h4 className="font-bold">Is this chinese grammar checker free to use?</h4>
+              <p>Yes, our basic chinese grammar checker features are completely free to use.</p>
             </div>
             <div>
-              <h4 className="font-bold">How accurate is the grammar checker?</h4>
-              <p>Our AI-powered system is highly accurate and continuously improving through machine learning.</p>
+              <h4 className="font-bold">How accurate is the chinese grammar checker?</h4>
+              <p>Our AI-powered chinese grammar checker is highly accurate and continuously improving through machine learning.</p>
             </div>
             <div>
-              <h4 className="font-bold">Can it check Traditional Chinese characters?</h4>
-              <p>Yes, our system supports both Simplified and Traditional Chinese characters.</p>
+              <h4 className="font-bold">Can your chinese grammar checker handle Traditional Chinese characters?</h4>
+              <p>Yes, our chinese grammar checker fully supports both Simplified and Traditional Chinese characters.</p>
             </div>
             <div>
-              <h4 className="font-bold">What types of errors can it detect?</h4>
-              <p>Our system detects grammar errors, word usage mistakes, punctuation errors, and style inconsistencies.</p>
+              <h4 className="font-bold">What types of errors can your chinese grammar checker detect?</h4>
+              <p>Our chinese grammar checker system detects grammar errors, word usage mistakes, punctuation errors, and style inconsistencies.</p>
             </div>
           </div>
 
           <h2>Start Writing Better Chinese Today</h2>
           <p>
             Whether you're writing an essay, preparing a business document, or learning Chinese, 
-            our grammar checker is here to help. Try it now and experience the difference in 
-            your Chinese writing quality.
+            our chinese grammar checker is here to help. Try our chinese grammar checker now 
+            and experience the difference in your Chinese writing quality. With continuous updates and 
+            improvements, our chinese grammar checker remains the most reliable tool for ensuring 
+            error-free Chinese writing.
           </p>
 
-          <h2>Learning Resources and Tips</h2>
+          <div className="bg-blue-50 p-6 rounded-lg my-8">
+            <h3 className="font-bold text-xl mb-4">Why Choose our Chinese Grammar Checker?</h3>
+            <ul className="space-y-2">
+              <li>✓ Most comprehensive chinese grammar checker available online</li>
+              <li>✓ Supports both Traditional and Simplified Chinese characters</li>
+              <li>✓ AI-powered analysis for maximum accuracy</li>
+              <li>✓ Regular updates to improve checking accuracy</li>
+              <li>✓ Free access to basic chinese grammar checker features</li>
+            </ul>
+          </div>
+
+          <h2>Learning Resources and Tips for Using our Chinese Grammar Checker</h2>
           <div className="space-y-4">
             <div>
-              <h4 className="font-bold">Effective Learning Strategies</h4>
+              <h4 className="font-bold">Effective Learning with our chinese grammar checker</h4>
               <p>
-                Improve your Chinese writing with these methods:
-                - Regular practice with feedback
-                - Reading authentic materials
-                - Studying example sentences
-                - Using context-based learning
-                - Practicing with native speakers
+                Improve your Chinese writing by combining our chinese grammar checker with these methods:
+                - Regular practice with feedback from our tool
+                - Reading authentic materials and checking them
+                - Using our checker for example sentences
+                - Context-based learning with real-time corrections
+                - Practicing with native speakers and verifying with our tool
               </p>
             </div>
 
