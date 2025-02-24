@@ -1,16 +1,5 @@
 import { useState } from 'react';
-import { ResponseLanguage, InputType, LanguageStyle } from '../types/grammar';
-
-interface APIResponse {
-  isCorrect: boolean;
-  errors?: Array<{
-    start: number;
-    end: number;
-    severity: 'low' | 'medium' | 'high';
-    message: string;
-  }>;
-  correctedText?: string;
-}
+import { ResponseLanguage, InputType, LanguageStyle, APIResponse } from '../types/grammar';
 
 export function useGrammarCheck() {
   const [isLoading, setIsLoading] = useState(false);

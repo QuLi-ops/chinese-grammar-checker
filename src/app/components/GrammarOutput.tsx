@@ -15,6 +15,7 @@ interface GrammarOutputProps {
   isCorrect: boolean;
   errors?: Error[];
   correctedText?: string;
+  explanations?: string[];
 }
 
 const GrammarOutput: React.FC<GrammarOutputProps> = ({
@@ -22,6 +23,7 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
   isCorrect,
   errors = [],
   correctedText,
+  explanations = [],
 }) => {
   const renderText = () => {
     if (isCorrect) {
@@ -107,6 +109,21 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
           />
         </div>
 
+        {!isCorrect && explanations.length > 0 && (
+          <div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Detailed Explanations
+            </h3>
+            <div className="p-4 bg-blue-50 rounded-md text-blue-700">
+              <ul className="list-decimal list-inside space-y-2">
+                {explanations.map((explanation, index) => (
+                  <li key={index}>{explanation}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+
         {!isCorrect && correctedText && (
           <div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -123,6 +140,7 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
           </div>
         )}
 
+        {/* Temporarily commented out severity indicators
         {!isCorrect && errors.length > 0 && (
           <div className="mt-4">
             <div className="flex space-x-4">
@@ -141,6 +159,7 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
             </div>
           </div>
         )}
+        */}
       </div>
     </div>
   );

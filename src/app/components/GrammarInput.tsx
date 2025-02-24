@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useGrammarCheck } from '../hooks/useGrammarCheck';
 import GrammarOutput from './GrammarOutput';
-import { ResponseLanguage, InputType, LanguageStyle } from '../types/grammar';
+import { ResponseLanguage, InputType, LanguageStyle, APIResponse } from '../types/grammar';
 
 const GrammarInput: React.FC = () => {
   const [text, setText] = useState('');
@@ -80,6 +80,7 @@ const GrammarInput: React.FC = () => {
                 />
                 <span className="ml-2">Sentence</span>
               </label>
+              {/* Temporarily commented out paragraph and article options
               <label className="inline-flex items-center">
                 <input
                   type="radio"
@@ -100,6 +101,7 @@ const GrammarInput: React.FC = () => {
                 />
                 <span className="ml-2">Article</span>
               </label>
+              */}
             </div>
           </div>
 
@@ -107,12 +109,23 @@ const GrammarInput: React.FC = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Input Text
             </label>
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="Enter text to check..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[150px]"
-            />
+            <div className="relative">
+              <textarea
+                value={text}
+                onChange={(e) => {
+                  const newText = e.target.value;
+                  if (newText.length <= 400) {
+                    setText(newText);
+                  }
+                }}
+                placeholder="Enter text to check... (Maximum 400 characters)"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[150px]"
+                maxLength={400}
+              />
+              <div className="absolute bottom-2 right-2 text-sm text-gray-500">
+                {text.length}/400
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-end">
