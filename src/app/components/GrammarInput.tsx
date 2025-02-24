@@ -4,6 +4,12 @@ import React, { useState } from 'react';
 import { useGrammarCheck } from '../hooks/useGrammarCheck';
 import GrammarOutput from './GrammarOutput';
 import { ResponseLanguage, InputType, LanguageStyle, APIResponse } from '../types/grammar';
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 
 const GrammarInput: React.FC = () => {
   const [text, setText] = useState('');
@@ -18,138 +24,108 @@ const GrammarInput: React.FC = () => {
     await checkGrammar(text, responseLanguage, inputType, style);
   };
 
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value;
+    if (newText.length <= 400) {
+      setText(newText);
+    }
+  };
+
   return (
     <div>
-      <div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="flex space-x-4 items-start">
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Response Language
-              </label>
-              <select
-                value={responseLanguage}
-                onChange={(e) => setResponseLanguage(e.target.value as ResponseLanguage)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      <Card className="w-full max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle>Grammar Check</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="flex space-x-4 items-start">
+              <div className="flex-1 space-y-2">
+                <Label>Response Language</Label>
+                <Select 
+                  value={responseLanguage} 
+                  onValueChange={(value: string) => setResponseLanguage(value as ResponseLanguage)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Chinese">Chinese</SelectItem>
+                    <SelectItem value="English">English</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex-1 space-y-2">
+                <Label>Language Style</Label>
+                <RadioGroup
+                  value={style}
+                  onValueChange={(value: string) => setStyle(value as LanguageStyle)}
+                  className="flex space-x-4"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="formal" id="formal" />
+                    <Label htmlFor="formal">Formal</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="informal" id="informal" />
+                    <Label htmlFor="informal">Informal</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Input Type</Label>
+              <RadioGroup
+                value={inputType}
+                onValueChange={(value: string) => setInputType(value as InputType)}
+                className="flex space-x-4"
               >
-                <option value="Chinese">Chinese</option>
-                <option value="English">English</option>
-              </select>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="sentence" id="sentence" />
+                  <Label htmlFor="sentence">Sentence</Label>
+                </div>
+                {/* Temporarily commented out paragraph and article options */}
+              </RadioGroup>
             </div>
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Language Style
-              </label>
-              <div className="flex space-x-4">
-                <label className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    value="formal"
-                    checked={style === 'formal'}
-                    onChange={(e) => setStyle(e.target.value as LanguageStyle)}
-                    className="form-radio text-blue-600"
-                  />
-                  <span className="ml-2">Formal</span>
-                </label>
-                <label className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    value="informal"
-                    checked={style === 'informal'}
-                    onChange={(e) => setStyle(e.target.value as LanguageStyle)}
-                    className="form-radio text-blue-600"
-                  />
-                  <span className="ml-2">Informal</span>
-                </label>
+
+            <div className="space-y-2">
+              <Label>Input Text</Label>
+              <div className="relative">
+                <Textarea
+                  value={text}
+                  onChange={handleTextChange}
+                  placeholder="Enter text to check... (Maximum 400 characters)"
+                  className="min-h-[150px]"
+                  maxLength={400}
+                />
+                <span className="absolute bottom-2 right-2 text-sm text-muted-foreground">
+                  {text.length}/400
+                </span>
               </div>
             </div>
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Input Type
-            </label>
-            <div className="flex space-x-4">
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  value="sentence"
-                  checked={inputType === 'sentence'}
-                  onChange={(e) => setInputType(e.target.value as InputType)}
-                  className="form-radio text-blue-600"
-                />
-                <span className="ml-2">Sentence</span>
-              </label>
-              {/* Temporarily commented out paragraph and article options
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  value="paragraph"
-                  checked={inputType === 'paragraph'}
-                  onChange={(e) => setInputType(e.target.value as InputType)}
-                  className="form-radio text-blue-600"
-                />
-                <span className="ml-2">Paragraph</span>
-              </label>
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  value="article"
-                  checked={inputType === 'article'}
-                  onChange={(e) => setInputType(e.target.value as InputType)}
-                  className="form-radio text-blue-600"
-                />
-                <span className="ml-2">Article</span>
-              </label>
-              */}
+            <div className="flex justify-end">
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? 'Checking...' : 'Check Grammar'}
+              </Button>
             </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Input Text
-            </label>
-            <div className="relative">
-              <textarea
-                value={text}
-                onChange={(e) => {
-                  const newText = e.target.value;
-                  if (newText.length <= 400) {
-                    setText(newText);
-                  }
-                }}
-                placeholder="Enter text to check... (Maximum 400 characters)"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[150px]"
-                maxLength={400}
-              />
-              <div className="absolute bottom-2 right-2 text-sm text-gray-500">
-                {text.length}/400
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Checking...' : 'Check Grammar'}
-            </button>
-          </div>
-        </form>
-      </div>
+          </form>
+        </CardContent>
+      </Card>
 
       {isLoading && (
-        <div className="mt-8 text-center text-gray-600">
+        <div className="mt-8 text-center text-muted-foreground">
           Checking grammar...
         </div>
       )}
       
       {error && (
-        <div className="mt-8 p-4 bg-red-50 border border-red-200 rounded-md text-red-600">
-          {error}
-        </div>
+        <Card className="mt-8 border-destructive">
+          <CardContent className="pt-6">
+            <p className="text-destructive">{error}</p>
+          </CardContent>
+        </Card>
       )}
       
       {!isLoading && !error && result && (
@@ -158,6 +134,7 @@ const GrammarInput: React.FC = () => {
           isCorrect={result.isCorrect}
           errors={result.errors}
           correctedText={result.correctedText}
+          explanations={result.explanations}
         />
       )}
     </div>
