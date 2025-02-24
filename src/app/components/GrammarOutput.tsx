@@ -122,11 +122,6 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
     );
   };
 
-  // 移除序号前缀的函数
-  const removeNumberPrefix = (text: string) => {
-    return text.replace(/^\d+\.\s*/, '');
-  };
-
   return (
     <div className="w-full max-w-2xl mx-auto mt-8">
       <Card>
