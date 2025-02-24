@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 
 const GrammarInput: React.FC = () => {
   const [text, setText] = useState('');
-  const [responseLanguage, setResponseLanguage] = useState<ResponseLanguage>('Chinese');
+  const [responseLanguage, setResponseLanguage] = useState<ResponseLanguage>('English');
   const [inputType, setInputType] = useState<InputType>('sentence');
   const [style, setStyle] = useState<LanguageStyle>('formal');
 
@@ -50,8 +50,8 @@ const GrammarInput: React.FC = () => {
                     <SelectValue placeholder="Select language" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Chinese">Chinese</SelectItem>
                     <SelectItem value="English">English</SelectItem>
+                    <SelectItem value="Chinese">Chinese</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
