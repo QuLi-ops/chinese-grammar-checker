@@ -180,10 +180,10 @@ export async function POST(request: NextRequest) {
     console.log('\n===================\n');
 
     return NextResponse.json(result);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error during grammar check:', error);
     return NextResponse.json(
-      { error: `Error during grammar check: ${error.message}` },
+      { error: `Error during grammar check: ${error instanceof Error ? error.message : 'Unknown error'}` },
       { status: 500 }
     );
   }
