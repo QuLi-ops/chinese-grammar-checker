@@ -17,25 +17,37 @@ Treat each input as a new, standalone request.
 Always respond in ${responseLanguage}. But every section that repeat the user's text should be the language that is user's text.
 User's text is ${style} style.
 
-You must respond in the following JSON format:
+You must respond in the following JSON format ONLY, with no additional text:
 {
   "isCorrect": boolean,
-  "markedText": string | null,  // Original text with errors marked using *** ***. Only present if isCorrect is false
-  "explanations": string[] | null,  // Array of explanations, numbered as "1. ", "2. ", etc. Only present if isCorrect is false
-  "correctedText": string | null  // The corrected version of the text. Only present if isCorrect is false
+  "text": string,  // Original text with errors marked using *** ***
+  "explanations": string[],  // Array of explanations, numbered as "1. ", "2. ", etc.
+  "correctedText": string  // The corrected version of the text
+}
+
+Example response for incorrect text:
+{
+  "isCorrect": false,
+  "text": "This is ***a*** incorrect sentence",
+  "explanations": ["1. The article 'a' should be 'an' before a word starting with a vowel sound"],
+  "correctedText": "This is an incorrect sentence"
+}
+
+Example response for correct text:
+{
+  "isCorrect": true,
+  "text": "This is a correct sentence",
+  "explanations": [],
+  "correctedText": "This is a correct sentence"
 }
 
 Rules:
-1. If the grammar is correct:
-   - Set "isCorrect": true
-   - All other fields should be null
-2. If the grammar is incorrect:
-   - Set "isCorrect": false
-   - Mark each error in markedText with *** ***
-   - Each explanation in explanations array should be numbered (e.g. "1. This is wrong", "2. That is incorrect")
-   - Number of explanations should match number of errors marked in markedText
-   - Provide the corrected version in correctedText
-3. Do not include any additional text or formatting outside of this JSON structure.`
+1. ONLY output valid JSON, no other text or formatting
+2. Always include all fields in the response
+3. For correct text, return the same text in both text and correctedText fields
+4. For incorrect text, mark errors with *** *** in the text field
+5. Number explanations starting from 1 (e.g., "1. ", "2. ", etc.)
+6. Make sure the number of explanations matches the number of errors marked`
     },
     {
       role: 'user',
@@ -140,8 +152,8 @@ export async function POST(request: NextRequest) {
         model: 'anthropic/claude-3.5-haiku-20241022',
         messages,
         response_format: { "type": "json_object" },
+        temperature: 0.3,
         top_p: 1,
-        repetition_penalty: 1,
       }),
     });
 
@@ -150,45 +162,56 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
-    console.log('\n=== AI Response Details ===');
-    console.log('Complete AI Response:', data);
     
-    if (!data.choices || !Array.isArray(data.choices) || data.choices.length === 0) {
-      console.error('Invalid response format - missing choices array:', data);
-      throw new Error('Invalid response format');
+    if (!data.choices?.[0]?.message?.content) {
+      throw new Error('Invalid response format from AI');
     }
 
-    if (!data.choices[0].message || typeof data.choices[0].message.content !== 'string') {
-      console.error('Invalid message format in response:', data.choices[0]);
-      throw new Error('Invalid message format');
+    let llmResponse;
+    try {
+      llmResponse = JSON.parse(data.choices[0].message.content.trim());
+    } catch (e) {
+      console.error('JSON parse error:', e);
+      console.error('Raw content:', data.choices[0].message.content);
+      throw new Error('Failed to parse AI response as JSON');
     }
 
-    console.log('Raw response:', data.choices[0].message.content);
-    console.log('\n=== Parsed Response ===');
+    // Extract errors from marked text
+    const errors = [];
+    if (!llmResponse.isCorrect) {
+      const regex = /\*\*\*(.*?)\*\*\*/g;
+      let match;
+      let index = 0;
+      
+      while ((match = regex.exec(llmResponse.text)) !== null) {
+        const errorText = match[1];
+        const start = index + llmResponse.text.slice(index).indexOf(match[0]);
+        const end = start + errorText.length;
+        
+        errors.push({
+          start,
+          end,
+          severity: 'high',
+          message: llmResponse.explanations[errors.length] || 'Grammar error'
+        });
+        
+        index = end;
+      }
+    }
 
-    const llmResponse = JSON.parse(data.choices[0].message.content);
-    console.log('Parsed JSON:', JSON.stringify(llmResponse, null, 2));
-    console.log('\n=== Processing Results ===');
-    
-    // Ensure explanations is always an array
-    const explanations = llmResponse.isCorrect ? [] : (llmResponse.explanations || []);
-    
     const result = {
-      text: llmResponse.isCorrect ? "✓" : llmResponse.markedText,
+      text: text, // Original text without markers
       isCorrect: llmResponse.isCorrect,
-      errors: llmResponse.isCorrect ? [] : extractErrors(llmResponse.markedText, explanations),
+      errors,
       correctedText: llmResponse.correctedText,
-      explanations: explanations // Add explanations to the response
+      explanations: llmResponse.explanations
     };
-    
-    console.log('Final processed result:', JSON.stringify(result, null, 2));
-    console.log('===============================\n');
-    
+
     return NextResponse.json(result);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error during grammar check:', error);
     return NextResponse.json(
-      { error: 'An error occurred while processing your request' },
+      { error: `Error during grammar check: ${error.message}` },
       { status: 500 }
     );
   }

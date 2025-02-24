@@ -109,15 +109,17 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
           />
         </div>
 
-        {!isCorrect && explanations.length > 0 && (
+        {!isCorrect && explanations && explanations.length > 0 && (
           <div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Detailed Explanations
+              Grammar Explanations
             </h3>
-            <div className="p-4 bg-blue-50 rounded-md text-blue-700">
-              <ul className="list-decimal list-inside space-y-2">
+            <div className="p-4 bg-blue-50 rounded-md">
+              <ul className="space-y-2 text-blue-800">
                 {explanations.map((explanation, index) => (
-                  <li key={index}>{explanation}</li>
+                  <li key={index} className="leading-relaxed">
+                    {explanation}
+                  </li>
                 ))}
               </ul>
             </div>

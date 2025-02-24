@@ -158,6 +158,7 @@ const GrammarInput: React.FC = () => {
           isCorrect={result.isCorrect}
           errors={result.errors}
           correctedText={result.correctedText}
+          explanations={result.explanations}
         />
       )}
     </div>
