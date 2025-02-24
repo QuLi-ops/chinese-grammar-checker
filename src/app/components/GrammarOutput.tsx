@@ -20,7 +20,7 @@ interface GrammarOutputProps {
   isCorrect: boolean;
   errors?: Error[];
   correctedText?: string;
-  explanations?: { [key: string]: string[] };
+  explanations?: { [key: string]: string | string[] };
 }
 
 const GrammarOutput: React.FC<GrammarOutputProps> = ({
@@ -147,17 +147,21 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
               <CardTitle className="mb-4">Grammar Explanations</CardTitle>
               <ScrollArea className="p-4 bg-blue-50 dark:bg-blue-950 rounded-md max-h-[300px]">
                 <ul className="space-y-3 text-blue-800 dark:text-blue-200">
-                  {Object.entries(explanations).map(([id, explanationArray]) => (
+                  {Object.entries(explanations).map(([id, explanation]) => (
                     <li key={id} className="flex items-start space-x-2">
                       <Badge variant="outline" className="mt-1 shrink-0">
-                        {id}
+                        {id.replace('error_', '')}
                       </Badge>
                       <div className="leading-relaxed">
-                        {explanationArray.map((explanation, index) => (
-                          <div key={index} className={index > 0 ? "mt-1 text-sm opacity-80" : ""}>
-                            {explanation}
-                          </div>
-                        ))}
+                        {Array.isArray(explanation) ? 
+                          explanation.map((exp, index) => (
+                            <div key={index} className={index > 0 ? "mt-1 text-sm opacity-80" : ""}>
+                              {exp}
+                            </div>
+                          ))
+                          :
+                          <div>{explanation}</div>
+                        }
                       </div>
                     </li>
                   ))}

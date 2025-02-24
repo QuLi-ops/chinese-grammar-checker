@@ -17,18 +17,6 @@ Treat each input as a new, standalone request.
 Always respond in ${responseLanguage}. But every section that repeat the user's text should be the language that is user's text.
 User's text is ${style} style.
 
-You must respond in JSON format with the following structure:
-{
-  "isCorrect": boolean,    // true if text is correct, false if there are errors
-  "text": string,         // original text with errors marked using <<error_id:error_text>>
-  "explanations": {       // object with error_id as keys and explanations as values
-    "error_1": "explanation for first error",
-    "error_2": "explanation for second error",
-    "error_N": "explanation for Nth error"  // N represents the total number of errors found
-  },
-  "correctedText": string // the corrected version of the text
-}
-
 Your task is to:
 1. Check if the text is grammatically correct
 2. If there are errors, mark them with <<error_id:error_text>>
@@ -69,7 +57,34 @@ export async function POST(request: NextRequest) {
           require_parameters: true
         },
         response_format: {
-          type: "json_object"
+          type: "json_schema",
+          json_schema: {
+            name: "grammar_check",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                isCorrect: {
+                  type: "boolean",
+                  description: "Whether the text is grammatically correct"
+                },
+                text: {
+                  type: "string",
+                  description: "Original text with errors marked using <<error_id:error_text>>"
+                },
+                explanations: {
+                  type: "object",
+                  description: "Object mapping error_id to explanation array"
+                },
+                correctedText: {
+                  type: "string",
+                  description: "The corrected version of the text"
+                }
+              },
+              required: ["isCorrect", "text", "explanations", "correctedText"],
+              additionalProperties: false
+            }
+          }
         },
         temperature: 0.3,
         top_p: 1,
