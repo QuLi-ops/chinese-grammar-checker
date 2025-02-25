@@ -12,6 +12,103 @@
     "about": "About",
     "settings": "Settings"
   },
+  "home": {
+    "title": "Professional Chinese Grammar Checker",
+    "description": "Advanced AI-powered tool for checking Chinese grammar, style, and tone. Perfect for students, professionals, and Chinese learners.",
+    "why": {
+      "title": "Why Use Our Chinese Grammar Checker?",
+      "description": "Our Chinese grammar checker is an advanced tool designed to help you write better Chinese. Whether you're a student learning Chinese, a professional writing business documents, or someone looking to improve their Chinese writing skills, our tool provides comprehensive grammar checking and suggestions. As the most reliable Chinese grammar checker available online, we focus on providing accurate, context-aware corrections for all your Chinese writing needs."
+    },
+    "features": {
+      "title": "Key Features of Our Chinese Grammar Checker",
+      "realtime": {
+        "title": "Real-time Grammar Checking:",
+        "description": "Our Chinese grammar checker instantly identifies grammar mistakes as you type"
+      },
+      "contextual": {
+        "title": "Contextual Corrections:",
+        "description": "Unlike basic grammar checkers, our Chinese grammar checker provides suggestions that consider the full context of your writing"
+      },
+      "style": {
+        "title": "Style Recommendations:",
+        "description": "The Chinese grammar checker adapts to your chosen style, whether formal or informal"
+      },
+      "explanations": {
+        "title": "Detailed Explanations:",
+        "description": "Each correction comes with clear, educational explanations"
+      },
+      "voice": {
+        "title": "Voice Output:",
+        "description": "Hear the correct pronunciation of your text"
+      }
+    },
+    "challenges": {
+      "title": "Common Chinese Grammar Challenges",
+      "description": "Writing in Chinese presents unique challenges that our grammar checker helps you overcome:",
+      "list": {
+        "wordOrder": "Proper word order in Chinese sentences",
+        "measureWords": "Correct usage of measure words (量词)",
+        "particles": "Appropriate particle usage (了, 过, 着)",
+        "characters": "Complex character combinations",
+        "formal": "Formal vs. informal expression",
+        "timeExpressions": "Time expressions and word order",
+        "particles2": "Proper use of 的, 地, and 得",
+        "complements": "Complement usage (结果补语, 趋向补语, etc.)",
+        "topicComment": "Topic-comment structure",
+        "serialVerb": "Serial verb constructions"
+      }
+    },
+    "mistakes": {
+      "title": "Common Mistakes and Solutions",
+      "description": "Watch out for these common mistakes and learn how to correct them:",
+      "list": {
+        "wordChoice": "Word Choice Errors",
+        "structural": "Structural Errors"
+      }
+    },
+    "cta": {
+      "title": "Start Writing Better Chinese Today",
+      "description": "Whether you're writing an essay, preparing a business document, or learning Chinese, our Chinese grammar checker is here to help. Try our Chinese grammar checker now and experience the difference in your Chinese writing quality.",
+      "benefits": {
+        "accuracy": {
+          "title": "Accuracy",
+          "description": "Advanced AI technology ensures precise grammar corrections"
+        },
+        "speed": {
+          "title": "Speed",
+          "description": "Get instant feedback on your Chinese writing"
+        },
+        "learning": {
+          "title": "Learning",
+          "description": "Improve your Chinese skills with detailed explanations"
+        }
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "items": {
+        "free": {
+          "question": "Is this Chinese grammar checker free to use?",
+          "answer": "Yes, our basic Chinese grammar checker features are completely free to use."
+        },
+        "accuracy": {
+          "question": "How accurate is the Chinese grammar checker?",
+          "answer": "Our AI-powered Chinese grammar checker is highly accurate and continuously improving through machine learning."
+        },
+        "traditional": {
+          "question": "Can your Chinese grammar checker handle Traditional Chinese characters?",
+          "answer": "Yes, our Chinese grammar checker fully supports both Simplified and Traditional Chinese characters."
+        },
+        "errorTypes": {
+          "question": "What types of errors can your Chinese grammar checker detect?",
+          "answer": "Our Chinese grammar checker system detects grammar errors, word usage mistakes, punctuation errors, and style inconsistencies."
+        }
+      }
+    },
+    "footer": {
+      "copyright": "© 2024 Chinese Grammar Checker. All rights reserved."
+    }
+  },
   "actions": {
     "check": "Check",
     "clear": "Clear",
