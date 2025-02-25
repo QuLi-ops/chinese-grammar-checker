@@ -3,6 +3,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslations } from 'next-intl';
 
 interface VoiceOutputProps {
   text: string;
@@ -15,6 +16,8 @@ const VoiceOutput: React.FC<VoiceOutputProps> = ({
   language,
   isEnabled = false,
 }) => {
+  const t = useTranslations('voiceOutput');
+
   const handleSpeak = () => {
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(text);
@@ -50,7 +53,7 @@ const VoiceOutput: React.FC<VoiceOutputProps> = ({
             d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18.012l-7-4.2V10.2l7-4.2v12.012z"
           />
         </svg>
-        <span>Listen</span>
+        <span>{t('listen')}</span>
       </Button>
     </div>
   );

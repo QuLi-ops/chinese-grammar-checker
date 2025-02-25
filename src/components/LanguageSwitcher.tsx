@@ -1,7 +1,7 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -15,12 +15,24 @@ export default function LanguageSwitcher() {
   const t = useTranslations('settings');
   const locale = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
 
   const switchLocale = (newLocale: string) => {
-    // 获取当前路径并替换语言部分
-    const currentPath = window.location.pathname;
-    const newPath = currentPath.replace(`/${locale}/`, `/${newLocale}/`);
-    router.push(newPath);
+    // 直接使用完整的URL重定向，避免路径处理问题
+    const origin = window.location.origin;
+    
+    // 从当前路径中移除语言前缀
+    let path = pathname;
+    if (path.startsWith(`/${locale}`)) {
+      // 移除当前语言前缀
+      path = path.substring(locale.length + 1) || '/';
+    }
+    
+    // 构建新的URL
+    const newUrl = `${origin}/${newLocale}${path === '/' ? '' : path}`;
+    
+    // 使用window.location直接导航，确保完全刷新页面
+    window.location.href = newUrl;
   };
 
   return (

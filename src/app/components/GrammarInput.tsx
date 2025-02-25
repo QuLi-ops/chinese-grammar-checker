@@ -10,8 +10,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { useTranslations } from 'next-intl';
 
 const GrammarInput: React.FC = () => {
+  const t = useTranslations('grammarInput');
   const [text, setText] = useState('');
   const [responseLanguage, setResponseLanguage] = useState<ResponseLanguage>('English');
   const [inputType, setInputType] = useState<InputType>('sentence');
@@ -35,13 +37,13 @@ const GrammarInput: React.FC = () => {
     <div>
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
-          <CardTitle>Grammar Check</CardTitle>
+          <CardTitle>{t('title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex space-x-4 items-start">
               <div className="flex-1 space-y-2">
-                <Label>Response Language</Label>
+                <Label>{t('responseLanguage')}</Label>
                 <Select 
                   value={responseLanguage} 
                   onValueChange={(value: string) => setResponseLanguage(value as ResponseLanguage)}
@@ -56,7 +58,7 @@ const GrammarInput: React.FC = () => {
                 </Select>
               </div>
               <div className="flex-1 space-y-2">
-                <Label>Language Style</Label>
+                <Label>{t('languageStyle')}</Label>
                 <RadioGroup
                   value={style}
                   onValueChange={(value: string) => setStyle(value as LanguageStyle)}
@@ -64,18 +66,18 @@ const GrammarInput: React.FC = () => {
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="formal" id="formal" />
-                    <Label htmlFor="formal">Formal</Label>
+                    <Label htmlFor="formal">{t('formal')}</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="informal" id="informal" />
-                    <Label htmlFor="informal">Informal</Label>
+                    <Label htmlFor="informal">{t('informal')}</Label>
                   </div>
                 </RadioGroup>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label>Input Type</Label>
+              <Label>{t('inputType')}</Label>
               <RadioGroup
                 value={inputType}
                 onValueChange={(value: string) => setInputType(value as InputType)}
@@ -83,31 +85,31 @@ const GrammarInput: React.FC = () => {
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="sentence" id="sentence" />
-                  <Label htmlFor="sentence">Sentence</Label>
+                  <Label htmlFor="sentence">{t('sentence')}</Label>
                 </div>
                 {/* Temporarily commented out paragraph and article options */}
               </RadioGroup>
             </div>
 
             <div className="space-y-2">
-              <Label>Input Text</Label>
+              <Label>{t('inputText')}</Label>
               <div className="relative">
                 <Textarea
                   value={text}
                   onChange={handleTextChange}
-                  placeholder="Enter text to check... (Maximum 400 characters)"
+                  placeholder={t('placeholder')}
                   className="min-h-[150px]"
                   maxLength={400}
                 />
                 <span className="absolute bottom-2 right-2 text-sm text-muted-foreground">
-                  {text.length}/400
+                  {t('characterCount', { count: text.length })}
                 </span>
               </div>
             </div>
 
             <div className="flex justify-end">
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? 'Checking...' : 'Check Grammar'}
+                {isLoading ? t('checkingButton') : t('checkButton')}
               </Button>
             </div>
           </form>
@@ -116,7 +118,7 @@ const GrammarInput: React.FC = () => {
 
       {isLoading && (
         <div className="mt-8 text-center text-muted-foreground">
-          Checking grammar...
+          {t('checkingMessage')}
         </div>
       )}
       

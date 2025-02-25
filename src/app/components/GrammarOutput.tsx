@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTranslations } from 'next-intl';
 
 interface Error {
   start: number;
@@ -30,6 +31,8 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
   correctedText,
   explanations = {},
 }) => {
+  const t = useTranslations('grammarOutput');
+
   const renderText = () => {
     if (isCorrect) {
       return (
@@ -47,7 +50,7 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
               d="M5 13l4 4L19 7"
             />
           </svg>
-          <span>Grammatically Correct</span>
+          <span>{t('correct')}</span>
         </div>
       );
     }
@@ -126,7 +129,7 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
     <div className="w-full max-w-2xl mx-auto mt-8">
       <Card>
         <CardHeader>
-          <CardTitle>Check Results</CardTitle>
+          <CardTitle>{t('title')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
@@ -144,7 +147,7 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
 
           {!isCorrect && explanations && Object.keys(explanations).length > 0 && (
             <div>
-              <CardTitle className="mb-4">Grammar Explanations</CardTitle>
+              <CardTitle className="mb-4">{t('explanationsTitle')}</CardTitle>
               <ScrollArea className="p-4 bg-blue-50 dark:bg-blue-950 rounded-md max-h-[300px]">
                 <ul className="space-y-3 text-blue-800 dark:text-blue-200">
                   {Object.entries(explanations).map(([id, explanation]) => (
@@ -172,7 +175,7 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
 
           {!isCorrect && correctedText && (
             <div>
-              <CardTitle className="mb-4">Suggested Corrections</CardTitle>
+              <CardTitle className="mb-4">{t('correctionsTitle')}</CardTitle>
               <div className="p-4 bg-emerald-50 dark:bg-emerald-950 rounded-md text-emerald-700 dark:text-emerald-200">
                 <ScrollArea className="max-h-[200px]">
                   <div className="text-lg leading-relaxed">
