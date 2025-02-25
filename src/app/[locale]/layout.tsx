@@ -19,7 +19,7 @@ export default function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
       <header className="fixed top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-14 items-center">
           <div className="flex flex-1 items-center justify-between">
             <nav className="flex items-center space-x-6">
               {/* Add your navigation items here */}
@@ -28,7 +28,7 @@ export default function LocaleLayout({
           </div>
         </div>
       </header>
-      <main className="container mt-16">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 mt-16">
         {children}
       </main>
     </NextIntlClientProvider>
