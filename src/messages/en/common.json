@@ -1,0 +1,25 @@
+{
+  "app": {
+    "title": "Chinese Grammar Checker",
+    "description": "An intelligent Chinese grammar checking tool",
+    "input": {
+      "placeholder": "Enter Chinese text here...",
+      "check": "Start Checking"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "settings": "Settings"
+  },
+  "actions": {
+    "check": "Check",
+    "clear": "Clear",
+    "copy": "Copy",
+    "paste": "Paste"
+  },
+  "settings": {
+    "language": "Language",
+    "theme": "Theme"
+  }
+} 

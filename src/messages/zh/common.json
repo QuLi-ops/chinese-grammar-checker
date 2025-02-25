@@ -1,0 +1,25 @@
+{
+  "app": {
+    "title": "中文语法检查器",
+    "description": "一个智能的中文语法检查工具",
+    "input": {
+      "placeholder": "在此输入中文文本...",
+      "check": "开始检查"
+    }
+  },
+  "nav": {
+    "home": "首页",
+    "about": "关于",
+    "settings": "设置"
+  },
+  "actions": {
+    "check": "检查",
+    "clear": "清除",
+    "copy": "复制",
+    "paste": "粘贴"
+  },
+  "settings": {
+    "language": "语言",
+    "theme": "主题"
+  }
+} 
