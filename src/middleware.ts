@@ -1,15 +1,16 @@
 import createMiddleware from 'next-intl/middleware';
 
+// 创建中间件，处理国际化路由
 export default createMiddleware({
-  // A list of all locales that are supported
+  // 支持的语言列表
   locales: ['en', 'zh'],
-
-  // If this locale is matched, pathnames work without a prefix (e.g. `/about`)
+  // 默认语言
   defaultLocale: 'en',
-  localeDetection: false
+  // 禁用自动语言检测
+  localeDetection: false,
 });
 
 export const config = {
-  // Skip all paths that should not be internationalized
+  // 匹配所有需要国际化的路径
   matcher: ['/((?!api|_next|.*\\..*).*)']
 }; 
