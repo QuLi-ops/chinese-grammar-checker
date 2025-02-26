@@ -1,22 +1,28 @@
-import {NextIntlClientProvider, useMessages} from 'next-intl';
+import {NextIntlClientProvider} from 'next-intl';
+import {getMessages, setRequestLocale} from 'next-intl/server';
 import {notFound} from 'next/navigation';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const locales = ['en', 'zh'];
 
-export default function LocaleLayout({
+export default async function LocaleLayout({
   children,
   params
 }: {
   children: React.ReactNode;
-  params: {locale: string};
+  params: Promise<{locale: string}>;
 }) {
-  const locale = params.locale;
+  // 在 Next.js 15 中，params 是一个 Promise，必须 await
+  const { locale } = await params;
   
-  // Validate that the incoming `locale` parameter is valid
+  // 设置请求的 locale
+  setRequestLocale(locale);
+  
+  // 验证传入的 locale 参数是否有效
   if (!locales.includes(locale)) notFound();
 
-  const messages = useMessages();
+  // 获取消息资源
+  const messages = await getMessages();
  
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
