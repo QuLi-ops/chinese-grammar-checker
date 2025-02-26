@@ -23,6 +23,12 @@ const GrammarInput: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // 检查文本是否为空或只包含空白字符
+    if (!text.trim()) {
+      return;
+    }
+    
     await checkGrammar(text, responseLanguage, inputType, style);
   };
 
@@ -113,7 +119,10 @@ const GrammarInput: React.FC = () => {
             </div>
 
             <div className="flex justify-end">
-              <Button type="submit" disabled={isLoading}>
+              <Button 
+                type="submit" 
+                disabled={isLoading || !text.trim()}
+              >
                 {isLoading ? t('checkingButton') : t('checkButton')}
               </Button>
             </div>
