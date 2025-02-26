@@ -73,29 +73,16 @@ export async function POST(request: NextRequest) {
                   description: "Original text with errors marked using <<error_id:error_text>>"
                 },
                 explanations: {
-                  type: "object",
-                  description: "Object mapping error_id to explanation array",
-                  properties: {
-                    error_1: {
-                      type: "array",
-                      items: {
-                        type: "string"
-                      },
-                      description: "Explanation array for error 1"
+                  type: "array",
+                  description: "Array of error explanations",
+                  items: {
+                    type: "object",
+                    properties: {
+                      error_id: { type: "string" },
+                      error_text: { type: "string" },
+                      explanation: { type: "string" }
                     },
-                    error_2: {
-                      type: "array",
-                      items: {
-                        type: "string"
-                      },
-                      description: "Explanation array for error 2"
-                    }
-                  },
-                  additionalProperties: {
-                    type: "array",
-                    items: {
-                      type: "string"
-                    }
+                    required: ["error_id", "error_text", "explanation"]
                   }
                 },
                 correctedText: {

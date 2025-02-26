@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import VoiceOutput from './VoiceOutput';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -16,12 +16,18 @@ interface Error {
   id: number;
 }
 
+interface ExplanationItem {
+  error_id: string;
+  error_text: string;
+  explanation: string;
+}
+
 interface GrammarOutputProps {
   text: string;
   isCorrect: boolean;
   errors?: Error[];
   correctedText?: string;
-  explanations?: { [key: string]: string | string[] };
+  explanations?: ExplanationItem[];
 }
 
 const GrammarOutput: React.FC<GrammarOutputProps> = ({
@@ -29,9 +35,21 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
   isCorrect,
   errors = [],
   correctedText,
-  explanations = {},
+  explanations = [],
 }) => {
   const t = useTranslations('grammarOutput');
+
+  // 计算错误解释区域的高度
+  const explanationsHeight = useMemo(() => {
+    // 基础高度为100px
+    const baseHeight = 100;
+    // 每个错误项增加60px高度
+    const itemHeight = 60;
+    // 计算总高度
+    const totalHeight = baseHeight + (explanations.length * itemHeight);
+    // 设置最小高度和最大高度
+    return Math.max(150, Math.min(500, totalHeight));
+  }, [explanations.length]);
 
   const renderText = () => {
     if (isCorrect) {
@@ -145,26 +163,24 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
             />
           </div>
 
-          {!isCorrect && explanations && Object.keys(explanations).length > 0 && (
+          {!isCorrect && explanations && explanations.length > 0 && (
             <div>
-              <CardTitle className="mb-4">{t('explanationsTitle')}</CardTitle>
-              <ScrollArea className="p-4 bg-blue-50 dark:bg-blue-950 rounded-md max-h-[300px]">
-                <ul className="space-y-3 text-blue-800 dark:text-blue-200">
-                  {Object.entries(explanations).map(([id, explanation]) => (
-                    <li key={id} className="flex items-start space-x-2">
+              <CardTitle className="mb-4">
+                {t('explanationsTitle')} ({explanations.length})
+              </CardTitle>
+              <ScrollArea 
+                className="p-4 bg-blue-50 dark:bg-blue-950 rounded-md" 
+                style={{ height: `${explanationsHeight}px` }}
+              >
+                <ul className="space-y-3 text-blue-800 dark:text-blue-200 w-full">
+                  {explanations.map((item) => (
+                    <li key={item.error_id} className="flex items-start space-x-2">
                       <Badge variant="outline" className="mt-1 shrink-0">
-                        {id.replace('error_', '')}
+                        {item.error_id.replace('error_', '')}
                       </Badge>
                       <div className="leading-relaxed">
-                        {Array.isArray(explanation) ? 
-                          explanation.map((exp, index) => (
-                            <div key={index} className={index > 0 ? "mt-1 text-sm opacity-80" : ""}>
-                              {exp}
-                            </div>
-                          ))
-                          :
-                          <div>{explanation}</div>
-                        }
+                        <div className="font-medium">{item.error_text}</div>
+                        <div className="mt-1">{item.explanation}</div>
                       </div>
                     </li>
                   ))}
