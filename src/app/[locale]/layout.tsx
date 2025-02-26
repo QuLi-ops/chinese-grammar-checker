@@ -6,13 +6,15 @@ const locales = ['en', 'zh'];
 
 export default function LocaleLayout({
   children,
-  params: {locale}
+  params
 }: {
   children: React.ReactNode;
   params: {locale: string};
 }) {
+  const locale = params.locale;
+  
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale as any)) notFound();
+  if (!locales.includes(locale)) notFound();
 
   const messages = useMessages();
  

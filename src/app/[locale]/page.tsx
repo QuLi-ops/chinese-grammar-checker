@@ -76,7 +76,7 @@ export default function Home() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <ul className="space-y-3 text-gray-700">
-                {t.raw('challenges.list1').map((item, index) => (
+                {t.raw('challenges.list1').map((item: string, index: number) => (
                   <li key={index} className="flex items-center space-x-2">
                     <span className="text-blue-500">•</span>
                     <span>{item}</span>
@@ -84,7 +84,7 @@ export default function Home() {
                 ))}
               </ul>
               <ul className="space-y-3 text-gray-700">
-                {t.raw('challenges.list2').map((item, index) => (
+                {t.raw('challenges.list2').map((item: string, index: number) => (
                   <li key={index} className="flex items-center space-x-2">
                     <span className="text-blue-500">•</span>
                     <span>{item}</span>
@@ -101,7 +101,7 @@ export default function Home() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <ul className="space-y-3 text-gray-700">
-                {t.raw('mistakes.list').map((item, index) => (
+                {t.raw('mistakes.list').map((item: string, index: number) => (
                   <li key={index} className="flex items-center space-x-2">
                     <span className="text-blue-500">•</span>
                     <span>{item}</span>
@@ -118,7 +118,7 @@ export default function Home() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <ul className="space-y-3 text-gray-700">
-                {t.raw('styleGuidelines.list').map((item, index) => (
+                {t.raw('styleGuidelines.list').map((item: string, index: number) => (
                   <li key={index} className="flex items-center space-x-2">
                     <span className="text-blue-500">•</span>
                     <span>{item}</span>
@@ -135,7 +135,7 @@ export default function Home() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <ul className="space-y-3 text-gray-700">
-                {t.raw('advancedTechniques.list1').map((item, index) => (
+                {t.raw('advancedTechniques.list1').map((item: string, index: number) => (
                   <li key={index} className="flex items-center space-x-2">
                     <span className="text-blue-500">•</span>
                     <span>{item}</span>
@@ -143,7 +143,7 @@ export default function Home() {
                 ))}
               </ul>
               <ul className="space-y-3 text-gray-700">
-                {t.raw('advancedTechniques.list2').map((item, index) => (
+                {t.raw('advancedTechniques.list2').map((item: string, index: number) => (
                   <li key={index} className="flex items-center space-x-2">
                     <span className="text-blue-500">•</span>
                     <span>{item}</span>
@@ -160,7 +160,7 @@ export default function Home() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <ul className="space-y-3 text-gray-700">
-                {t.raw('grammarPoints.list1').map((item, index) => (
+                {t.raw('grammarPoints.list1').map((item: string, index: number) => (
                   <li key={index} className="flex items-center space-x-2">
                     <span className="text-blue-500">•</span>
                     <span>{item}</span>
@@ -168,7 +168,7 @@ export default function Home() {
                 ))}
               </ul>
               <ul className="space-y-3 text-gray-700">
-                {t.raw('grammarPoints.list2').map((item, index) => (
+                {t.raw('grammarPoints.list2').map((item: string, index: number) => (
                   <li key={index} className="flex items-center space-x-2">
                     <span className="text-blue-500">•</span>
                     <span>{item}</span>
@@ -181,7 +181,7 @@ export default function Home() {
           <div className="bg-white p-8 rounded-xl shadow-sm">
             <h2 className="text-3xl font-bold mb-6">{t('faq.title')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {t.raw('faq.questions').map((faq, index) => (
+              {t.raw('faq.questions').map((faq: { question: string; answer: string }, index: number) => (
                 <div key={index} className="bg-gray-50 p-6 rounded-lg">
                   <h4 className="font-bold text-lg mb-3">{faq.question}</h4>
                   <p className="text-gray-700">{faq.answer}</p>
@@ -196,7 +196,7 @@ export default function Home() {
               {t('cta.description')}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {t.raw('cta.benefits').map((benefit, index) => (
+              {t.raw('cta.benefits').map((benefit: { title: string; description: string }, index: number) => (
                 <div key={index} className="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
                   <h4 className="font-bold text-xl mb-3">{benefit.title}</h4>
                   <p>{benefit.description}</p>
@@ -211,7 +211,7 @@ export default function Home() {
               <div className="border border-gray-200 p-6 rounded-lg hover:shadow-md transition-shadow">
                 <h4 className="font-bold text-xl mb-4">{t('resources.writing.title')}</h4>
                 <ul className="space-y-3 text-gray-700">
-                  {t.raw('resources.writing.items').map((item, index) => (
+                  {t.raw('resources.writing.items').map((item: string, index: number) => (
                     <li key={index} className="flex items-center space-x-2">
                       <span className="text-blue-500">•</span>
                       <span>{item}</span>
@@ -222,7 +222,7 @@ export default function Home() {
               <div className="border border-gray-200 p-6 rounded-lg hover:shadow-md transition-shadow">
                 <h4 className="font-bold text-xl mb-4">{t('resources.tools.title')}</h4>
                 <ul className="space-y-3 text-gray-700">
-                  {t.raw('resources.tools.items').map((item, index) => (
+                  {t.raw('resources.tools.items').map((item: string, index: number) => (
                     <li key={index} className="flex items-center space-x-2">
                       <span className="text-blue-500">•</span>
                       <span>{item}</span>
@@ -233,7 +233,7 @@ export default function Home() {
               <div className="border border-gray-200 p-6 rounded-lg hover:shadow-md transition-shadow">
                 <h4 className="font-bold text-xl mb-4">{t('resources.methods.title')}</h4>
                 <ul className="space-y-3 text-gray-700">
-                  {t.raw('resources.methods.items').map((item, index) => (
+                  {t.raw('resources.methods.items').map((item: string, index: number) => (
                     <li key={index} className="flex items-center space-x-2">
                       <span className="text-blue-500">•</span>
                       <span>{item}</span>
