@@ -54,6 +54,11 @@ const GrammarInput: React.FC = () => {
                   <SelectContent>
                     <SelectItem value="English">English</SelectItem>
                     <SelectItem value="Chinese">Chinese</SelectItem>
+                    <SelectItem value="Spanish">Spanish</SelectItem>
+                    <SelectItem value="French">French</SelectItem>
+                    <SelectItem value="German">German</SelectItem>
+                    <SelectItem value="Japanese">Japanese</SelectItem>
+                    <SelectItem value="Korean">Korean</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -17,7 +17,7 @@ Treat each input as a new, standalone request.
 Always respond in ${responseLanguage}. But every section that repeat the user's text should be the language that is user's text.
 User's text is ${style} style.
 
-You must respond in JSON format with the following structure:
+You must respond in JSON format with the following structure, and can't say any other characters:
 {
   "isCorrect": boolean,    // true if text is correct, false if there are errors
   "text": string,         // original text with errors marked using <<error_id:error_text>>
