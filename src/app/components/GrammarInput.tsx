@@ -39,14 +39,6 @@ const GrammarInput: React.FC = () => {
     }
   };
 
-  const transformExplanations = (explanations: { [key: string]: string[] } | undefined) => {
-    if (!explanations) return undefined;
-    return Object.entries(explanations).map(([error_id, messages]) => ({
-      error_id,
-      error_text: messages[0] || '',
-      explanation: messages.join('. ')
-    }));
-  };
 
   return (
     <div>
@@ -158,7 +150,14 @@ const GrammarInput: React.FC = () => {
           text={result.text}
           isCorrect={result.isCorrect}
           correctedText={result.correctedText}
-          explanations={transformExplanations(result.explanations)}
+          explanations={result.explanations ? 
+            Object.entries(result.explanations).map(([id, explanation]) => ({
+              error_id: id,
+              error_text: '',
+              explanation: Array.isArray(explanation) ? explanation[0] : explanation
+            })) : 
+            undefined
+          }
         />
       )}
     </div>
