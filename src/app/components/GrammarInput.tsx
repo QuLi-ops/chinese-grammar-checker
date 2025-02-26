@@ -39,6 +39,15 @@ const GrammarInput: React.FC = () => {
     }
   };
 
+  const transformExplanations = (explanations: { [key: string]: string[] } | undefined) => {
+    if (!explanations) return undefined;
+    return Object.entries(explanations).map(([error_id, messages]) => ({
+      error_id,
+      error_text: messages[0] || '',
+      explanation: messages.join('. ')
+    }));
+  };
+
   return (
     <div>
       <Card className="w-full max-w-2xl mx-auto">
@@ -148,9 +157,8 @@ const GrammarInput: React.FC = () => {
         <GrammarOutput
           text={result.text}
           isCorrect={result.isCorrect}
-          errors={result.errors}
           correctedText={result.correctedText}
-          explanations={result.explanations}
+          explanations={transformExplanations(result.explanations)}
         />
       )}
     </div>
