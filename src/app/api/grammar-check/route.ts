@@ -171,19 +171,18 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const result = {
-      text: text,
+    const finalResult = {
       isCorrect: llmResponse.isCorrect,
-      errors,
+      text,
       correctedText: llmResponse.correctedText,
       explanations: llmResponse.explanations
     };
 
     console.log('\n=== Final Result ===');
-    console.log(JSON.stringify(result, null, 2));
+    console.log(JSON.stringify(finalResult, null, 2));
     console.log('\n===================\n');
 
-    return NextResponse.json(result);
+    return NextResponse.json(finalResult);
   } catch (error: unknown) {
     console.error('Error during grammar check:', error);
     return NextResponse.json(
