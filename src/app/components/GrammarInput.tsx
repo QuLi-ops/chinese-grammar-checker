@@ -150,14 +150,7 @@ const GrammarInput: React.FC = () => {
           text={result.text}
           isCorrect={result.isCorrect}
           correctedText={result.correctedText}
-          explanations={result.explanations ? 
-            Object.entries(result.explanations).map(([id, explanation]) => ({
-              error_id: id,
-              error_text: '',
-              explanation: Array.isArray(explanation) ? explanation[0] : explanation
-            })) : 
-            undefined
-          }
+          explanations={result.explanations}
         />
       )}
     </div>

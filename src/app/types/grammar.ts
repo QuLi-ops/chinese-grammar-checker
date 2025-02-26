@@ -21,5 +21,11 @@ export interface APIResponse {
   isCorrect: boolean;
   errors?: GrammarError[];
   correctedText?: string;
-  explanations?: { [key: string]: string[] };
+  explanations?: ExplanationItem[];
+}
+
+export interface ExplanationItem {
+  error_id: string;
+  error_text: string;
+  explanation: string;
 } 
