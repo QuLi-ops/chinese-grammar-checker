@@ -2,7 +2,7 @@ import {getRequestConfig} from 'next-intl/server';
 
 // 定义支持的语言和默认语言
 const defaultLocale = 'en';
-const locales = ['zh', 'en'] as const;
+const locales = ['zh', 'en', 'ja'] as const;
 type Locale = typeof locales[number];
 
 export default getRequestConfig(async ({requestLocale}) => {
@@ -23,6 +23,9 @@ export default getRequestConfig(async ({requestLocale}) => {
 
   // 加载英语语法检查器翻译文件
   const englishGrammarCheckerMessages = (await import(`../messages/${resolvedLocale}/englishgrammarchecker.json`)).default;
+
+  // 加载中文语法检查器翻译文件
+  const chineseGrammarCheckerMessages = (await import(`../messages/${resolvedLocale}/chinesegrammarchecker.json`)).default;
 
   return {
     messages: {

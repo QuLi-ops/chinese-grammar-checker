@@ -5,7 +5,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 
-const locales = ['en', 'zh'];
+const locales = ['en', 'zh', 'ja'];
 
 export default async function LocaleLayout({
   children,

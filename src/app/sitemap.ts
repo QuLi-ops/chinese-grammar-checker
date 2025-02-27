@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 // 支持的语言
-const locales = ['en', 'zh'];
+const locales = ['en', 'zh', 'ja'];
 
 // 页面路径（不包括语言前缀）
 const pages = [

@@ -5,7 +5,7 @@ export default getRequestConfig(async ({requestLocale}) => {
   let locale = await requestLocale;
   
   // 确保 locale 有效，如果无效则使用默认值
-  if (!locale || !['en', 'zh'].includes(locale)) {
+  if (!locale || !['en', 'zh', 'ja'].includes(locale)) {
     locale = 'en';
   }
   
@@ -20,6 +20,9 @@ export default getRequestConfig(async ({requestLocale}) => {
 
   // 加载英语语法检查器翻译文件
   const englishGrammarCheckerMessages = (await import(`../messages/${locale}/englishgrammarchecker.json`)).default;
+
+  // 加载中文语法检查器翻译文件
+  const chineseGrammarCheckerMessages = (await import(`../messages/${locale}/chinesegrammarchecker.json`)).default;
 
   return {
     locale,

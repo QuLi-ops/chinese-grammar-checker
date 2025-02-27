@@ -55,6 +55,12 @@ export default function LanguageSwitcher() {
         >
           English
         </DropdownMenuItem>
+        <DropdownMenuItem 
+          onClick={() => switchLocale('ja')}
+          className={locale === 'ja' ? 'bg-accent' : ''}
+        >
+          日本語
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
