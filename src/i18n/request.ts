@@ -12,8 +12,17 @@ export default getRequestConfig(async ({requestLocale}) => {
   // 确保 locale 是支持的语言之一
   const resolvedLocale = locales.includes(locale as Locale) ? locale as Locale : defaultLocale;
 
+  // 加载通用翻译文件
+  const commonMessages = (await import(`../messages/${resolvedLocale}/common.json`)).default;
+  
+  // 加载日语语法检查器翻译文件
+  const japaneseGrammarCheckerMessages = (await import(`../messages/${resolvedLocale}/japanesegrammarchecker.json`)).default;
+
   return {
-    messages: (await import(`../messages/${resolvedLocale}/common.json`)).default,
+    messages: {
+      ...commonMessages,
+      japanesegrammarchecker: japaneseGrammarCheckerMessages
+    },
     locale: resolvedLocale,
     timeZone: 'Asia/Shanghai'
   };

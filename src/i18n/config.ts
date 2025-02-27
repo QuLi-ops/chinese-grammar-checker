@@ -9,8 +9,17 @@ export default getRequestConfig(async ({requestLocale}) => {
     locale = 'en';
   }
   
+  // 加载通用翻译文件
+  const commonMessages = (await import(`../messages/${locale}/common.json`)).default;
+  
+  // 加载日语语法检查器翻译文件
+  const japaneseGrammarCheckerMessages = (await import(`../messages/${locale}/japanesegrammarchecker.json`)).default;
+
   return {
     locale,
-    messages: (await import(`../messages/${locale}/common.json`)).default
+    messages: {
+      ...commonMessages,
+      japanesegrammarchecker: japaneseGrammarCheckerMessages
+    }
   };
 }); 

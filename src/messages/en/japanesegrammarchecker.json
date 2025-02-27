@@ -1,0 +1,183 @@
+{
+  "title": "Professional Japanese Grammar Checker",
+  "subtitle": "Advanced AI-powered tool for checking Japanese grammar, style, and tone. Perfect for students, professionals, and Japanese learners.",
+  "whyUse": {
+    "title": "Why Use Our Japanese Grammar Checker?",
+    "description": "Our Japanese grammar checker is an advanced tool designed to help you write better Japanese. Whether you're a student learning Japanese, a professional writing business documents, or someone looking to improve their Japanese writing skills, our tool provides comprehensive grammar checking and suggestions. As a reliable Japanese grammar checker available online, we focus on providing accurate, context-aware corrections for all your Japanese writing needs."
+  },
+  "features": {
+    "title": "Key Features of Our Japanese Grammar Checker",
+    "realTime": {
+      "title": "Real-time Grammar Checking:",
+      "description": "Our Japanese grammar checker instantly identifies grammar mistakes as you type"
+    },
+    "contextual": {
+      "title": "Contextual Corrections:",
+      "description": "Unlike basic grammar checkers, our Japanese grammar checker provides suggestions that consider the full context of your writing"
+    },
+    "style": {
+      "title": "Style Recommendations:",
+      "description": "The Japanese grammar checker adapts to your chosen style, whether formal or informal"
+    },
+    "explanations": {
+      "title": "Detailed Explanations:",
+      "description": "Each correction comes with clear, educational explanations"
+    },
+    "voice": {
+      "title": "Voice Output:",
+      "description": "Hear the correct pronunciation of your text"
+    }
+  },
+  "challenges": {
+    "title": "Common Japanese Grammar Challenges",
+    "description": "Writing in Japanese presents unique challenges that our grammar checker helps you overcome:",
+    "list1": [
+      "Proper particle usage (は, が, を, etc.)",
+      "Verb conjugation and tense",
+      "Polite vs. casual forms (敬語)",
+      "Word order in Japanese sentences",
+      "Counters and numerical expressions"
+    ],
+    "list2": [
+      "Transitivity pairs (自動詞/他動詞)",
+      "Conditional forms (と, ば, たら, なら)",
+      "Passive, causative, and potential forms",
+      "Honorific and humble language",
+      "Complex sentence structures"
+    ]
+  },
+  "mistakes": {
+    "title": "Common Mistakes and Solutions",
+    "description": "Watch out for these common mistakes and learn how to correct them:",
+    "list": [
+      "Particle Errors (助詞の誤り)",
+      "Verb Form Errors (動詞の形の誤り)",
+      "Adjective Errors (形容詞の誤り)",
+      "Word Order Errors (語順の誤り)"
+    ]
+  },
+  "styleGuidelines": {
+    "title": "Writing Style Guidelines",
+    "description": "Maintain text flow and coherence with these guidelines:",
+    "list": [
+      "Formal vs. Informal Japanese",
+      "Written vs. Spoken Japanese",
+      "Business Japanese Etiquette",
+      "Academic Writing Standards"
+    ]
+  },
+  "advancedTechniques": {
+    "title": "Advanced Writing Techniques",
+    "description": "Explore these techniques to enhance your Japanese writing:",
+    "list1": [
+      "Formal Writing (書き言葉)",
+      "Business Japanese (ビジネス日本語)"
+    ],
+    "list2": [
+      "Academic Writing (学術的な文章)",
+      "Creative Writing (創作文)"
+    ]
+  },
+  "grammarPoints": {
+    "title": "Detailed Grammar Points",
+    "description": "Learn about the specific rules and structures in Japanese:",
+    "list1": [
+      "Particles (助詞)",
+      "Verb Conjugation (動詞の活用)",
+      "Adjective Types (形容詞の種類)"
+    ],
+    "list2": [
+      "Sentence Patterns (文型)",
+      "Conjunctions (接続詞)",
+      "Compound Sentences (複文)"
+    ]
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "questions": [
+      {
+        "question": "Is this Japanese grammar checker free to use?",
+        "answer": "Yes, our basic Japanese grammar checker features are completely free to use."
+      },
+      {
+        "question": "How accurate is the Japanese grammar checker?",
+        "answer": "Our AI-powered Japanese grammar checker is highly accurate and continuously improving through machine learning."
+      },
+      {
+        "question": "Can your Japanese grammar checker handle both hiragana and kanji?",
+        "answer": "Yes, our Japanese grammar checker fully supports hiragana, katakana, and kanji characters."
+      },
+      {
+        "question": "What types of errors can your Japanese grammar checker detect?",
+        "answer": "Our Japanese grammar checker system detects grammar errors, particle usage mistakes, conjugation errors, and style inconsistencies."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Start Writing Better Japanese Today",
+    "description": "Whether you're writing an essay, preparing a business document, or learning Japanese, our Japanese grammar checker is here to help. Try our Japanese grammar checker now and experience the difference in your Japanese writing quality.",
+    "benefits": [
+      {
+        "title": "Accuracy",
+        "description": "Advanced AI technology ensures precise grammar corrections"
+      },
+      {
+        "title": "Speed",
+        "description": "Get instant feedback on your Japanese writing"
+      },
+      {
+        "title": "Learning",
+        "description": "Improve your Japanese skills with detailed explanations"
+      }
+    ]
+  },
+  "resources": {
+    "title": "Learning Resources",
+    "writing": {
+      "title": "Writing Practice",
+      "items": [
+        "Daily journal writing",
+        "Email correspondence",
+        "Blog writing"
+      ]
+    },
+    "tools": {
+      "title": "Online Tools",
+      "items": [
+        "Grammar checking",
+        "Online dictionaries",
+        "Learning apps"
+      ]
+    },
+    "methods": {
+      "title": "Study Methods",
+      "items": [
+        "Regular practice",
+        "Native feedback",
+        "Context learning"
+      ]
+    }
+  },
+  "footer": "© 2024 Japanese Grammar Checker. All rights reserved.",
+  "japaneseGrammarInput": {
+    "title": "Japanese Grammar Check",
+    "responseLanguage": "Response Language",
+    "languageStyle": "Language Style",
+    "formal": "Formal",
+    "informal": "Informal",
+    "inputType": "Input Type",
+    "sentence": "Sentence",
+    "inputText": "Input Japanese Text",
+    "placeholder": "Enter Japanese text to check... (Maximum 400 characters)",
+    "characterCount": "{count}/400",
+    "checkButton": "Check Grammar",
+    "checkingButton": "Checking...",
+    "checkingMessage": "Checking Japanese grammar..."
+  },
+  "japaneseGrammarOutput": {
+    "title": "Japanese Check Results",
+    "correct": "Grammatically Correct",
+    "explanationsTitle": "Grammar Explanations",
+    "correctionsTitle": "Suggested Corrections"
+  }
+} 
