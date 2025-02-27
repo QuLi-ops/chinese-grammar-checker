@@ -6,13 +6,15 @@
     "home": "Home",
     "chineseGrammarChecker": "Chinese Grammar Checker",
     "japaneseGrammarChecker": "Japanese Grammar Checker",
-    "koreanGrammarChecker": "Korean Grammar Checker"
+    "koreanGrammarChecker": "Korean Grammar Checker",
+    "englishGrammarChecker": "English Grammar Checker"
   },
   "footer": {
     "home": "Home",
     "chineseGrammarChecker": "Chinese Grammar Checker",
     "japaneseGrammarChecker": "Japanese Grammar Checker",
     "koreanGrammarChecker": "Korean Grammar Checker",
+    "englishGrammarChecker": "English Grammar Checker",
     "copyright": "© {year} Grammar Checker. All rights reserved."
   },
   "grammarInput": {

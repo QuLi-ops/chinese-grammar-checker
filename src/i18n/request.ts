@@ -21,11 +21,15 @@ export default getRequestConfig(async ({requestLocale}) => {
   // 加载韩语语法检查器翻译文件
   const koreanGrammarCheckerMessages = (await import(`../messages/${resolvedLocale}/koreangrammarchecker.json`)).default;
 
+  // 加载英语语法检查器翻译文件
+  const englishGrammarCheckerMessages = (await import(`../messages/${resolvedLocale}/englishgrammarchecker.json`)).default;
+
   return {
     messages: {
       ...commonMessages,
       japanesegrammarchecker: japaneseGrammarCheckerMessages,
-      koreangrammarchecker: koreanGrammarCheckerMessages
+      koreangrammarchecker: koreanGrammarCheckerMessages,
+      englishgrammarchecker: englishGrammarCheckerMessages
     },
     locale: resolvedLocale,
     timeZone: 'Asia/Shanghai'

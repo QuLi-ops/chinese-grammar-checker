@@ -1,0 +1,183 @@
+{
+  "title": "Professional English Grammar Checker",
+  "subtitle": "Advanced AI-powered tool for checking English grammar, style, and tone. Perfect for students, professionals, and English learners.",
+  "whyUse": {
+    "title": "Why Use Our English Grammar Checker?",
+    "description": "Our English grammar checker is an advanced tool designed to help you write better English. Whether you're a student learning English, a professional writing business documents, or someone looking to improve their English writing skills, our tool provides comprehensive grammar checking and suggestions. As a reliable English grammar checker available online, we focus on providing accurate, context-aware corrections for all your English writing needs."
+  },
+  "features": {
+    "title": "Key Features of Our English Grammar Checker",
+    "realTime": {
+      "title": "Real-time Grammar Checking:",
+      "description": "Our English grammar checker instantly identifies grammar mistakes as you type"
+    },
+    "contextual": {
+      "title": "Contextual Corrections:",
+      "description": "Unlike basic grammar checkers, our English grammar checker provides suggestions that consider the full context of your writing"
+    },
+    "style": {
+      "title": "Style Recommendations:",
+      "description": "The English grammar checker adapts to your chosen style, whether formal or informal"
+    },
+    "explanations": {
+      "title": "Detailed Explanations:",
+      "description": "Each correction comes with clear, educational explanations"
+    },
+    "voice": {
+      "title": "Voice Output:",
+      "description": "Hear the correct pronunciation of your text"
+    }
+  },
+  "challenges": {
+    "title": "Common English Grammar Challenges",
+    "description": "Writing in English presents unique challenges that our grammar checker helps you overcome:",
+    "list1": [
+      "Subject-verb agreement",
+      "Proper use of articles (a, an, the)",
+      "Tense consistency",
+      "Preposition usage",
+      "Punctuation rules"
+    ],
+    "list2": [
+      "Commonly confused words (their/there/they're)",
+      "Run-on sentences and fragments",
+      "Passive voice overuse",
+      "Wordiness and redundancy",
+      "Pronoun clarity"
+    ]
+  },
+  "mistakes": {
+    "title": "Common Mistakes and Solutions",
+    "description": "Watch out for these common mistakes and learn how to correct them:",
+    "list": [
+      "Subject-Verb Agreement Errors",
+      "Article Usage Errors",
+      "Tense Consistency Errors",
+      "Comma Splice Errors"
+    ]
+  },
+  "styleGuidelines": {
+    "title": "Writing Style Guidelines",
+    "description": "Maintain text flow and coherence with these guidelines:",
+    "list": [
+      "Academic vs. Casual English",
+      "Business English Conventions",
+      "Technical Writing Standards",
+      "Creative Writing Techniques"
+    ]
+  },
+  "advancedTechniques": {
+    "title": "Advanced Writing Techniques",
+    "description": "Explore these techniques to enhance your English writing:",
+    "list1": [
+      "Formal Academic Writing",
+      "Business English"
+    ],
+    "list2": [
+      "Technical Documentation",
+      "Creative Narrative"
+    ]
+  },
+  "grammarPoints": {
+    "title": "Detailed Grammar Points",
+    "description": "Learn about the specific rules and structures in English:",
+    "list1": [
+      "Parts of Speech",
+      "Sentence Structure",
+      "Verb Tenses"
+    ],
+    "list2": [
+      "Modifiers and Qualifiers",
+      "Conditional Sentences",
+      "Reported Speech"
+    ]
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "questions": [
+      {
+        "question": "Is this English grammar checker free to use?",
+        "answer": "Yes, our basic English grammar checker features are completely free to use."
+      },
+      {
+        "question": "How accurate is the English grammar checker?",
+        "answer": "Our AI-powered English grammar checker is highly accurate and continuously improving through machine learning."
+      },
+      {
+        "question": "Can your English grammar checker handle both American and British English?",
+        "answer": "Yes, our English grammar checker fully supports both American and British English variants and can be configured to check against either standard."
+      },
+      {
+        "question": "What types of errors can your English grammar checker detect?",
+        "answer": "Our English grammar checker system detects grammar errors, spelling mistakes, punctuation errors, style inconsistencies, and commonly confused words."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Start Writing Better English Today",
+    "description": "Whether you're writing an essay, preparing a business document, or learning English, our English grammar checker is here to help. Try our English grammar checker now and experience the difference in your English writing quality.",
+    "benefits": [
+      {
+        "title": "Accuracy",
+        "description": "Advanced AI technology ensures precise grammar corrections"
+      },
+      {
+        "title": "Speed",
+        "description": "Get instant feedback on your English writing"
+      },
+      {
+        "title": "Learning",
+        "description": "Improve your English skills with detailed explanations"
+      }
+    ]
+  },
+  "resources": {
+    "title": "Learning Resources",
+    "writing": {
+      "title": "Writing Practice",
+      "items": [
+        "Daily journal writing",
+        "Email correspondence",
+        "Blog writing"
+      ]
+    },
+    "tools": {
+      "title": "Online Tools",
+      "items": [
+        "Grammar checking",
+        "Online dictionaries",
+        "Learning apps"
+      ]
+    },
+    "methods": {
+      "title": "Study Methods",
+      "items": [
+        "Regular practice",
+        "Native feedback",
+        "Context learning"
+      ]
+    }
+  },
+  "footer": "© 2024 English Grammar Checker. All rights reserved.",
+  "englishGrammarInput": {
+    "title": "English Grammar Check",
+    "responseLanguage": "Response Language",
+    "languageStyle": "Language Style",
+    "formal": "Formal",
+    "informal": "Informal",
+    "inputType": "Input Type",
+    "sentence": "Sentence",
+    "inputText": "Input English Text",
+    "placeholder": "Enter English text to check... (Maximum 400 characters)",
+    "characterCount": "{count}/400",
+    "checkButton": "Check Grammar",
+    "checkingButton": "Checking...",
+    "checkingMessage": "Checking English grammar..."
+  },
+  "englishGrammarOutput": {
+    "title": "English Check Results",
+    "correct": "Grammatically Correct",
+    "explanationsTitle": "Grammar Explanations",
+    "correctionsTitle": "Suggested Corrections"
+  }
+} 

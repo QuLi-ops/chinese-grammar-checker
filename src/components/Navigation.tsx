@@ -13,7 +13,8 @@ export default function Navigation() {
   const links = [
     { href: '/', label: t('chineseGrammarChecker') },
     { href: '/japanese-grammar-checker', label: t('japaneseGrammarChecker') },
-    { href: '/korean-grammar-checker', label: t('koreanGrammarChecker') }
+    { href: '/korean-grammar-checker', label: t('koreanGrammarChecker') },
+    { href: '/english-grammar-checker', label: t('englishGrammarChecker') }
   ];
 
   return (
