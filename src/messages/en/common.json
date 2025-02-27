@@ -4,10 +4,12 @@
   },
   "nav": {
     "home": "Home",
+    "chineseGrammarChecker": "Chinese Grammar Checker",
     "japaneseGrammarChecker": "Japanese Grammar Checker"
   },
   "footer": {
     "home": "Home",
+    "chineseGrammarChecker": "Chinese Grammar Checker",
     "japaneseGrammarChecker": "Japanese Grammar Checker",
     "copyright": "© {year} Grammar Checker. All rights reserved."
   },

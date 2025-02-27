@@ -9,7 +9,7 @@ export default function Footer() {
   
   // 页脚链接
   const links = [
-    { href: '/', label: t('home') },
+    { href: '/', label: t('chineseGrammarChecker') },
     { href: '/japanese-grammar-checker', label: t('japaneseGrammarChecker') }
   ];
   

@@ -11,12 +11,12 @@ export default function Navigation() {
 
   // 导航链接
   const links = [
-    { href: '/', label: t('home') },
+    { href: '/', label: t('chineseGrammarChecker') },
     { href: '/japanese-grammar-checker', label: t('japaneseGrammarChecker') }
   ];
 
   return (
-    <nav className="flex items-center space-x-6">
+    <nav className="flex items-center justify-end w-full space-x-6">
       {links.map((link) => {
         // 构建完整路径
         const fullPath = `/${locale}${link.href === '/' ? '' : link.href}`;

@@ -24,7 +24,7 @@ The text is ${style} style.
 
 Your task is to:
 1. Check if the text is grammatically correct
-2. If there are errors, mark them with <<error_id:error_text>>
+2. If there are errors, mark them with <<error_id:error_text>> where error_id is the error number
 3. Provide clear explanations for each error
 4. Provide a corrected version of the text in the SAME LANGUAGE as the original input`
     },
