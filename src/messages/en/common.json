@@ -2,6 +2,15 @@
   "settings": {
     "language": "Change Language"
   },
+  "nav": {
+    "home": "Home",
+    "japaneseGrammarChecker": "Japanese Grammar Checker"
+  },
+  "footer": {
+    "home": "Home",
+    "japaneseGrammarChecker": "Japanese Grammar Checker",
+    "copyright": "© {year} Grammar Checker. All rights reserved."
+  },
   "grammarInput": {
     "title": "Grammar Check",
     "responseLanguage": "Response Language",
