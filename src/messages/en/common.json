@@ -5,12 +5,14 @@
   "nav": {
     "home": "Home",
     "chineseGrammarChecker": "Chinese Grammar Checker",
-    "japaneseGrammarChecker": "Japanese Grammar Checker"
+    "japaneseGrammarChecker": "Japanese Grammar Checker",
+    "koreanGrammarChecker": "Korean Grammar Checker"
   },
   "footer": {
     "home": "Home",
     "chineseGrammarChecker": "Chinese Grammar Checker",
     "japaneseGrammarChecker": "Japanese Grammar Checker",
+    "koreanGrammarChecker": "Korean Grammar Checker",
     "copyright": "© {year} Grammar Checker. All rights reserved."
   },
   "grammarInput": {

@@ -12,12 +12,14 @@
     "about": "关于",
     "settings": "设置",
     "chineseGrammarChecker": "中文语法检查器",
-    "japaneseGrammarChecker": "日语语法检查器"
+    "japaneseGrammarChecker": "日语语法检查器",
+    "koreanGrammarChecker": "韩语语法检查器"
   },
   "footer": {
     "home": "首页",
     "chineseGrammarChecker": "中文语法检查器",
     "japaneseGrammarChecker": "日语语法检查器",
+    "koreanGrammarChecker": "韩语语法检查器",
     "copyright": "© {year} 语法检查器。保留所有权利。"
   },
   "home": {

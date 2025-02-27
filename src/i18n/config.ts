@@ -15,11 +15,15 @@ export default getRequestConfig(async ({requestLocale}) => {
   // 加载日语语法检查器翻译文件
   const japaneseGrammarCheckerMessages = (await import(`../messages/${locale}/japanesegrammarchecker.json`)).default;
 
+  // 加载韩语语法检查器翻译文件
+  const koreanGrammarCheckerMessages = (await import(`../messages/${locale}/koreangrammarchecker.json`)).default;
+
   return {
     locale,
     messages: {
       ...commonMessages,
-      japanesegrammarchecker: japaneseGrammarCheckerMessages
+      japanesegrammarchecker: japaneseGrammarCheckerMessages,
+      koreangrammarchecker: koreanGrammarCheckerMessages
     }
   };
 }); 

@@ -12,7 +12,8 @@ export default function Navigation() {
   // 导航链接
   const links = [
     { href: '/', label: t('chineseGrammarChecker') },
-    { href: '/japanese-grammar-checker', label: t('japaneseGrammarChecker') }
+    { href: '/japanese-grammar-checker', label: t('japaneseGrammarChecker') },
+    { href: '/korean-grammar-checker', label: t('koreanGrammarChecker') }
   ];
 
   return (
