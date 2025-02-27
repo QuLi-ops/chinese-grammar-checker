@@ -21,9 +21,6 @@ export default getRequestConfig(async ({requestLocale}) => {
   // 加载英语语法检查器翻译文件
   const englishGrammarCheckerMessages = (await import(`../messages/${locale}/englishgrammarchecker.json`)).default;
 
-  // 加载中文语法检查器翻译文件
-  const chineseGrammarCheckerMessages = (await import(`../messages/${locale}/chinesegrammarchecker.json`)).default;
-
   return {
     locale,
     messages: {
