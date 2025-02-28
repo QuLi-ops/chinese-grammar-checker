@@ -2,8 +2,3 @@ name = "chinese-grammar-checker"
 main = "worker/index.ts"
 compatibility_date = "2023-12-01"
 
-# 使用单独的 TypeScript 配置
-[build]
-command = "tsc --project worker-tsconfig.json"
-
-# 如果您需要 KV 存储等其他资源，可以在这里添加
