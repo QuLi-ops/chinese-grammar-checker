@@ -10,7 +10,8 @@ export function useGrammarCheck() {
     text: string,
     responseLanguage: ResponseLanguage,
     inputType: InputType,
-    style: LanguageStyle
+    style: LanguageStyle,
+    requestId: string
   ) => {
     setIsLoading(true);
     setError(null);
@@ -26,6 +27,7 @@ export function useGrammarCheck() {
           responseLanguage,
           inputType,
           style,
+          requestId
         }),
       });
 

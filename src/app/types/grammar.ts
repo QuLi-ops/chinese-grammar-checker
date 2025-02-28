@@ -22,6 +22,7 @@ export interface APIResponse {
   errors?: GrammarError[];
   correctedText?: string;
   explanations?: ExplanationItem[];
+  llmResponse?: any; // 完整的 LLM 响应 JSON
 }
 
 export interface ExplanationItem {

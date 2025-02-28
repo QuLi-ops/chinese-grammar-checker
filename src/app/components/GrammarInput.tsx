@@ -11,6 +11,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useTranslations } from 'next-intl';
+import { sendGAEvent } from '@next/third-parties/google';
+import { v4 as uuidv4 } from 'uuid';
 
 const GrammarInput: React.FC = () => {
   const t = useTranslations('grammarInput');
@@ -18,6 +20,7 @@ const GrammarInput: React.FC = () => {
   const [responseLanguage, setResponseLanguage] = useState<ResponseLanguage>('English');
   const [inputType, setInputType] = useState<InputType>('sentence');
   const [style, setStyle] = useState<LanguageStyle>('formal');
+  const [requestId] = useState(() => uuidv4()); // 为每个会话生成唯一ID
 
   const { checkGrammar, isLoading, error, result } = useGrammarCheck();
 
@@ -28,8 +31,25 @@ const GrammarInput: React.FC = () => {
     if (!text.trim()) {
       return;
     }
+
+    // 记录用户输入事件
+    sendGAEvent('event', 'grammar_check_input', {
+      request_id: requestId,
+      text: text,
+      style: style,
+      response_language: responseLanguage
+    });
     
-    await checkGrammar(text, responseLanguage, inputType, style);
+    try {
+      await checkGrammar(text, responseLanguage, inputType, style, requestId);
+    } catch (error) {
+      // 记录错误事件
+      sendGAEvent('event', 'grammar_check_error', {
+        request_id: requestId,
+        error_type: 'processing',
+        error_message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
   };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -151,6 +171,8 @@ const GrammarInput: React.FC = () => {
           isCorrect={result.isCorrect}
           correctedText={result.correctedText}
           explanations={result.explanations}
+          requestId={requestId}
+          llmResponse={result.llmResponse}
         />
       )}
     </div>
