@@ -12,7 +12,7 @@ function constructPrompt(
   return [
     {
       role: 'system',
-      content: `You are a grammar checking assistant. Each response should be completely independent and not reference any previous conversations or context.
+      content: `You are a language grammar teacher. Each response should be completely independent and not reference any previous conversations or context.
 Treat each input as a new, standalone request.
 
 IMPORTANT LANGUAGE INSTRUCTIONS:
