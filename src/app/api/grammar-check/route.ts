@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Message, GrammarError } from '../../types/grammar';
 import { sendGAEvent } from '@next/third-parties/google';
+import { v4 as uuidv4 } from 'uuid'; // 需要安装: npm install uuid @types/uuid
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -8,10 +9,12 @@ const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 function constructPrompt(
   text: string,
   style: string,
-  responseLanguage: string
+  responseLanguage: string,
+  requestId: string
 ): Message[] {
-  // 记录用户输入事件，包含文本本身
+  // 记录用户输入事件，包含文本本身和请求ID
   sendGAEvent('event', 'grammar_check_input', {
+    request_id: requestId,
     text: text,
     style: style,
     response_language: responseLanguage
@@ -39,9 +42,13 @@ Your task is to:
 }
 
 export async function POST(request: NextRequest) {
+  // 为每个请求生成唯一ID
+  const requestId = uuidv4();
+  
   if (!OPENROUTER_API_KEY) {
-    // 记录API密钥缺失错误
+    // 记录API密钥缺失错误，包含请求ID
     sendGAEvent('event', 'grammar_check_error', {
+      request_id: requestId,
       error_type: 'configuration',
       error_message: 'OpenRouter API key not configured'
     });
@@ -56,7 +63,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { text, style, responseLanguage } = body;
 
-    const messages = constructPrompt(text, style, responseLanguage);
+    const messages = constructPrompt(text, style, responseLanguage, requestId);
 
     const response = await fetch(API_URL, {
       method: 'POST',
@@ -115,8 +122,9 @@ export async function POST(request: NextRequest) {
     });
 
     if (!response.ok) {
-      // 记录API请求失败事件
+      // 记录API请求失败事件，包含请求ID
       sendGAEvent('event', 'grammar_check_error', {
+        request_id: requestId,
         error_type: 'api_request',
         error_message: 'API request to OpenRouter failed',
         status_code: response.status
@@ -128,13 +136,15 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
     
     console.log('\n=== AI Request Details ===');
+    console.log('Request ID:', requestId);
     console.log('Input Text:', text);
     console.log('Style:', style);
     console.log('Response Language:', responseLanguage);
     
     if (!data.choices?.[0]?.message?.content) {
-      // 记录无效响应格式事件
+      // 记录无效响应格式事件，包含请求ID
       sendGAEvent('event', 'grammar_check_error', {
+        request_id: requestId,
         error_type: 'response_format',
         error_message: 'Invalid response format from AI'
       });
@@ -150,15 +160,19 @@ export async function POST(request: NextRequest) {
       console.log('\n=== AI Raw Response ===');
       console.log(rawContent);
       
-      // 记录AI原始响应事件
+      // 记录AI原始响应事件，包含请求ID
       sendGAEvent('event', 'grammar_check_ai_raw_response', {
+        request_id: requestId,
         response: rawContent
       });
       
       llmResponse = JSON.parse(rawContent);
       
-      // 直接使用解析后的JSON对象作为事件参数
-      sendGAEvent('event', 'grammar_check_ai_parsed_response', llmResponse);
+      // 记录AI解析响应事件，包含请求ID
+      sendGAEvent('event', 'grammar_check_ai_parsed_response', {
+        request_id: requestId,
+        ...llmResponse
+      });
       
       console.log('\n=== Parsed AI Response ===');
       console.log('Is Correct:', llmResponse.isCorrect);
@@ -166,8 +180,9 @@ export async function POST(request: NextRequest) {
       console.log('Explanations:', llmResponse.explanations);
       console.log('Corrected Text:', llmResponse.correctedText);
     } catch (e) {
-      // 记录JSON解析错误事件
+      // 记录JSON解析错误事件，包含请求ID
       sendGAEvent('event', 'grammar_check_error', {
+        request_id: requestId,
         error_type: 'json_parse',
         error_message: 'Failed to parse AI response as JSON'
       });
@@ -219,21 +234,22 @@ export async function POST(request: NextRequest) {
       explanations: llmResponse.explanations
     };
 
-    // 记录最终结果事件
+    // 记录最终结果事件，包含请求ID
     sendGAEvent('event', 'grammar_check_result', {
-      is_correct: finalResult.isCorrect,
-      has_corrections: finalResult.isCorrect === false,
-      explanation_count: finalResult.explanations ? finalResult.explanations.length : 0
+      request_id: requestId,
+      output_text: finalResult
     });
 
     console.log('\n=== Final Result ===');
+    console.log('Request ID:', requestId);
     console.log(JSON.stringify(finalResult, null, 2));
     console.log('\n===================\n');
 
     return NextResponse.json(finalResult);
   } catch (error: unknown) {
-    // 记录处理过程中的错误事件
+    // 记录处理过程中的错误事件，包含请求ID
     sendGAEvent('event', 'grammar_check_error', {
+      request_id: requestId,
       error_type: 'processing',
       error_message: error instanceof Error ? error.message : 'Unknown error'
     });
