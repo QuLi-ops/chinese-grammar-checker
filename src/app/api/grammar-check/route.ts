@@ -189,5 +189,5 @@ export async function POST(request: NextRequest) {
       { error: `Error during grammar check: ${error instanceof Error ? error.message : 'Unknown error'}` },
       { status: 500 }
     );
-  }
+  }  
 } 
