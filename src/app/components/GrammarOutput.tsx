@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTranslations } from 'next-intl';
-import { sendGAEvent } from '@next/third-parties/google';
 
 interface ExplanationItem {
   error_id: string;
@@ -19,8 +18,6 @@ interface GrammarOutputProps {
   isCorrect: boolean;
   correctedText?: string;
   explanations?: ExplanationItem[];
-  requestId: string;
-  llmResponse?: any;
 }
 
 const GrammarOutput: React.FC<GrammarOutputProps> = ({
@@ -28,23 +25,9 @@ const GrammarOutput: React.FC<GrammarOutputProps> = ({
   isCorrect,
   correctedText,
   explanations = [],
-  requestId,
-  llmResponse
 }) => {
   const t = useTranslations('grammarOutput');
   const [textSegments, setTextSegments] = useState<{text: string; isError?: boolean; errorId?: string}[]>([]);
-
-  useEffect(() => {
-    // 记录 AI 解析响应事件
-    sendGAEvent('event', 'grammar_check_ai_parsed_response', {
-      request_id: requestId,
-      isCorrect,
-      text,
-      correctedText,
-      explanations,
-      llmResponse // 完整的 LLM 响应
-    });
-  }, [requestId, isCorrect, text, correctedText, explanations, llmResponse]);
 
   // 根据error_text在原文中查找并标记错误
   useEffect(() => {
