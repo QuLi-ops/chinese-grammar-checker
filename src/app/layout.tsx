@@ -13,6 +13,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// 确定是否应该加载 Google Analytics
+const shouldLoadGA = () => {
+  // 只在生产环境加载 GA
+  if (process.env.NODE_ENV !== 'production') {
+    return false;
+  }
+  
+  // 可以添加其他条件，例如检查特定环境变量
+  // if (process.env.DISABLE_ANALYTICS === 'true') {
+  //   return false;
+  // }
+  
+  return true;
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://chinesegrammarchecker.com'),
   applicationName: 'Language Grammar Checker',
@@ -49,13 +64,17 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // 确定是否加载 GA
+  const loadGA = shouldLoadGA();
+  
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        <GoogleAnalytics gaId="G-FWFPJ6YBJZ" />
+        {/* 条件性加载 Google Analytics */}
+        {loadGA && <GoogleAnalytics gaId="G-FWFPJ6YBJZ" />}
       </body>
     </html>
   );
