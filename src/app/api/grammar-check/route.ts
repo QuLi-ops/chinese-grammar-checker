@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Message, GrammarError } from '../../types/grammar';
+import { sendGAEvent } from '@next/third-parties/google';
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -9,6 +10,13 @@ function constructPrompt(
   style: string,
   responseLanguage: string
 ): Message[] {
+  // 记录用户输入事件，包含文本本身
+  sendGAEvent('event', 'grammar_check_input', {
+    text: text,
+    style: style,
+    response_language: responseLanguage
+  });
+  
   return [
     {
       role: 'system',
@@ -32,6 +40,12 @@ Your task is to:
 
 export async function POST(request: NextRequest) {
   if (!OPENROUTER_API_KEY) {
+    // 记录API密钥缺失错误
+    sendGAEvent('event', 'grammar_check_error', {
+      error_type: 'configuration',
+      error_message: 'OpenRouter API key not configured'
+    });
+    
     return NextResponse.json(
       { error: 'OpenRouter API key not configured' },
       { status: 500 }
@@ -101,6 +115,13 @@ export async function POST(request: NextRequest) {
     });
 
     if (!response.ok) {
+      // 记录API请求失败事件
+      sendGAEvent('event', 'grammar_check_error', {
+        error_type: 'api_request',
+        error_message: 'API request to OpenRouter failed',
+        status_code: response.status
+      });
+      
       throw new Error('API request to OpenRouter failed');
     }
 
@@ -112,6 +133,12 @@ export async function POST(request: NextRequest) {
     console.log('Response Language:', responseLanguage);
     
     if (!data.choices?.[0]?.message?.content) {
+      // 记录无效响应格式事件
+      sendGAEvent('event', 'grammar_check_error', {
+        error_type: 'response_format',
+        error_message: 'Invalid response format from AI'
+      });
+      
       console.error('Error: Invalid response format from AI');
       console.log('Raw Response:', data);
       throw new Error('Invalid response format from AI');
@@ -123,7 +150,15 @@ export async function POST(request: NextRequest) {
       console.log('\n=== AI Raw Response ===');
       console.log(rawContent);
       
+      // 记录AI原始响应事件
+      sendGAEvent('event', 'grammar_check_ai_raw_response', {
+        response: rawContent
+      });
+      
       llmResponse = JSON.parse(rawContent);
+      
+      // 直接使用解析后的JSON对象作为事件参数
+      sendGAEvent('event', 'grammar_check_ai_parsed_response', llmResponse);
       
       console.log('\n=== Parsed AI Response ===');
       console.log('Is Correct:', llmResponse.isCorrect);
@@ -131,6 +166,12 @@ export async function POST(request: NextRequest) {
       console.log('Explanations:', llmResponse.explanations);
       console.log('Corrected Text:', llmResponse.correctedText);
     } catch (e) {
+      // 记录JSON解析错误事件
+      sendGAEvent('event', 'grammar_check_error', {
+        error_type: 'json_parse',
+        error_message: 'Failed to parse AI response as JSON'
+      });
+      
       console.error('\n=== JSON Parse Error ===');
       console.error('Error:', e);
       console.error('Raw Content:', data.choices[0].message.content);
@@ -178,12 +219,25 @@ export async function POST(request: NextRequest) {
       explanations: llmResponse.explanations
     };
 
+    // 记录最终结果事件
+    sendGAEvent('event', 'grammar_check_result', {
+      is_correct: finalResult.isCorrect,
+      has_corrections: finalResult.isCorrect === false,
+      explanation_count: finalResult.explanations ? finalResult.explanations.length : 0
+    });
+
     console.log('\n=== Final Result ===');
     console.log(JSON.stringify(finalResult, null, 2));
     console.log('\n===================\n');
 
     return NextResponse.json(finalResult);
   } catch (error: unknown) {
+    // 记录处理过程中的错误事件
+    sendGAEvent('event', 'grammar_check_error', {
+      error_type: 'processing',
+      error_message: error instanceof Error ? error.message : 'Unknown error'
+    });
+    
     console.error('Error during grammar check:', error);
     return NextResponse.json(
       { error: `Error during grammar check: ${error instanceof Error ? error.message : 'Unknown error'}` },
