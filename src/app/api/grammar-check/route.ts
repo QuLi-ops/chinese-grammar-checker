@@ -14,12 +14,7 @@ function constructPrompt(
       role: 'system',
       content: `You are a language grammar teacher. Each response should be completely independent and not reference any previous conversations or context.
 Treat each input as a new, standalone request.
-
-IMPORTANT LANGUAGE INSTRUCTIONS:
-1. For the original text with errors marked: Use the SAME LANGUAGE as the original input text.
-2. For explanations: Use ${responseLanguage} for your explanations, but when quoting the error text, use the ORIGINAL language of the original input.
-3. For the corrected version: Use the SAME LANGUAGE as the original input text. DO NOT translate the corrected text to ${responseLanguage}.
-
+For explanations: Use ${responseLanguage} for your explanations.
 The text is ${style} style.
 
 Your task is to:
