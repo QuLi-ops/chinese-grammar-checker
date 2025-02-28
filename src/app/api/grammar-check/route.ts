@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Message, GrammarError } from '../../types/grammar';
-import { v4 as uuidv4 } from 'uuid'; // 需要安装: npm install uuid @types/uuid
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -8,8 +7,7 @@ const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 function constructPrompt(
   text: string,
   style: string,
-  responseLanguage: string,
-  requestId: string
+  responseLanguage: string
 ): Message[] {
   return [
     {
@@ -33,8 +31,6 @@ Your task is to:
 }
 
 export async function POST(request: NextRequest) {
-  const requestId = uuidv4();
-  
   if (!OPENROUTER_API_KEY) {
     return NextResponse.json(
       { error: 'OpenRouter API key not configured' },
@@ -46,7 +42,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { text, style, responseLanguage } = body;
 
-    const messages = constructPrompt(text, style, responseLanguage, requestId);
+    const messages = constructPrompt(text, style, responseLanguage);
 
     const response = await fetch(API_URL, {
       method: 'POST',
@@ -111,7 +107,6 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
     
     console.log('\n=== AI Request Details ===');
-    console.log('Request ID:', requestId);
     console.log('Input Text:', text);
     console.log('Style:', style);
     console.log('Response Language:', responseLanguage);
@@ -184,7 +179,6 @@ export async function POST(request: NextRequest) {
     };
 
     console.log('\n=== Final Result ===');
-    console.log('Request ID:', requestId);
     console.log(JSON.stringify(finalResult, null, 2));
     console.log('\n===================\n');
 
