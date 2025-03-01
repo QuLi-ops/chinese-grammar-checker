@@ -2,3 +2,8 @@ name = "chinese-grammar-checker"
 main = "worker/index.ts"
 compatibility_date = "2023-12-01"
 
+# 添加 KV 绑定
+kv_namespaces = [
+  { binding = "LOGS", id = "8c514cc9685f488c81b2447250edcd76" }
+]
+
