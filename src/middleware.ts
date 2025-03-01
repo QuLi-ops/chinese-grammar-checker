@@ -15,7 +15,7 @@ export default createMiddleware({
 const LOG_WORKER_URL = process.env.LOG_WORKER_URL || 'https://chinese-grammar-checker.your-subdomain.workers.dev';
 
 export async function middleware(request: NextRequest, event: NextFetchEvent) {
-  // 只处理 API 请求
+  // 处理 API 请求的日志记录
   if (request.nextUrl.pathname.startsWith('/api/')) {
     const requestId = crypto.randomUUID();
     const startTime = Date.now();
@@ -74,10 +74,18 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     return response;
   }
   
+  // 处理国际化路径
+  // 这里是国际化路径处理逻辑
+  // 例如：检测用户语言、重定向到正确的语言路径等
+  // 注意：这部分代码取决于您的国际化实现方式
+  
   return NextResponse.next();
 }
 
-// 正确的 config 导出格式
+// 正确的 config 导出格式，同时匹配 API 路径和国际化路径
 export const config = {
-  matcher: ['/api/:path*']
+  matcher: [
+    '/api/:path*',           // 匹配所有 API 路径，用于日志记录
+    '/((?!api|_next|.*\\..*).*)'  // 匹配所有需要国际化的路径（排除 API、_next 和静态文件）
+  ]
 }; 
