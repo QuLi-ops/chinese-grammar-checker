@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
     let requestBody;
     try {
       requestBody = await requestClone.json();
-    } catch (e) {
+    } catch (_e) {
       requestBody = null;
     }
     
