@@ -15,3 +15,10 @@ API_LOGS_TOKEN = "my-secure-api-logs-token-2025" # 在生产环境中应使用�
 [observability]
 enabled = true
 
+# D1数据库配置
+[[d1_databases]]
+binding = "DB"
+database_name = "grammar-checker-logs"
+database_id = "14bba2f0-7764-4982-b1b5-81743472db41"
+migrations_dir = "migrations"
+

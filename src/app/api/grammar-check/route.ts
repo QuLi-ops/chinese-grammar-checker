@@ -14,10 +14,27 @@ interface LogData {
   [key: string]: unknown;
 }
 
+// 获取北京时间的ISO字符串
+function getBeijingTime(): string {
+  const now = new Date();
+  // 获取UTC时间的毫秒数
+  const utcTime = now.getTime();
+  // 北京时间比UTC早8小时，所以加上8小时的毫秒数
+  const beijingTime = new Date(utcTime + 8 * 60 * 60 * 1000);
+  // 返回ISO格式的字符串
+  return beijingTime.toISOString();
+}
+
 // 发送日志到 Cloudflare Worker
 async function sendLogToCloudflare(logData: LogData) {
   try {
     console.log('正在发送日志到 Cloudflare Worker:', logData);
+    
+    // 添加北京时间时间戳
+    const logWithTimestamp = {
+      ...logData,
+      beijingTimestamp: getBeijingTime()
+    };
     
     const response = await fetch(LOGS_API_URL, {
       method: 'POST',
@@ -25,7 +42,7 @@ async function sendLogToCloudflare(logData: LogData) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${LOGS_API_TOKEN}`
       },
-      body: JSON.stringify(logData)
+      body: JSON.stringify(logWithTimestamp)
     });
     
     if (!response.ok) {
@@ -72,15 +89,6 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now();
   
   if (!OPENROUTER_API_KEY) {
-    // 记录错误日志
-    sendLogToCloudflare({
-      type: 'error',
-      message: 'OpenRouter API key not configured',
-      path: '/api/grammar-check',
-      status: 500,
-      processingTime: Date.now() - startTime
-    });
-    
     return NextResponse.json(
       { error: 'OpenRouter API key not configured' },
       { status: 500 }
@@ -90,19 +98,6 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { text, style, responseLanguage } = body;
-
-    // 记录请求日志
-    sendLogToCloudflare({
-      type: 'request',
-      path: '/api/grammar-check',
-      requestData: {
-        text: text.substring(0, 100) + (text.length > 100 ? '...' : ''),
-        style,
-        responseLanguage
-      },
-      status: 200,
-      processingTime: Date.now() - startTime
-    });
 
     const messages = constructPrompt(text, style, responseLanguage);
 
@@ -163,16 +158,6 @@ export async function POST(request: NextRequest) {
     });
 
     if (!response.ok) {
-      // 记录 API 错误日志
-      sendLogToCloudflare({
-        type: 'error',
-        message: 'API request to OpenRouter failed',
-        path: '/api/grammar-check',
-        status: response.status,
-        statusText: response.statusText,
-        processingTime: Date.now() - startTime
-      });
-      
       throw new Error('API request to OpenRouter failed');
     }
 
@@ -186,16 +171,6 @@ export async function POST(request: NextRequest) {
     if (!data.choices?.[0]?.message?.content) {
       console.error('Error: Invalid response format from AI');
       console.log('Raw Response:', data);
-      
-      // 记录 AI 响应错误日志
-      sendLogToCloudflare({
-        type: 'error',
-        message: 'Invalid response format from AI',
-        path: '/api/grammar-check',
-        rawResponse: JSON.stringify(data).substring(0, 500),
-        processingTime: Date.now() - startTime
-      });
-      
       throw new Error('Invalid response format from AI');
     }
 
@@ -209,7 +184,7 @@ export async function POST(request: NextRequest) {
       sendLogToCloudflare({
         type: 'ai_raw_response',
         path: '/api/grammar-check',
-        rawContent: rawContent.substring(0, 1000), // 限制长度以避免过大
+        rawContent: rawContent,
         processingTime: Date.now() - startTime
       });
       
@@ -226,27 +201,15 @@ export async function POST(request: NextRequest) {
         type: 'ai_parsed_response',
         path: '/api/grammar-check',
         isCorrect: llmResponse.isCorrect,
-        markedText: llmResponse.text.substring(0, 500), // 限制长度
-        explanationsCount: llmResponse.explanations.length,
+        markedText: llmResponse.text,
         explanations: llmResponse.explanations,
-        correctedTextLength: llmResponse.correctedText.length,
+        correctedText: llmResponse.correctedText,
         processingTime: Date.now() - startTime
       });
     } catch (e) {
       console.error('\n=== JSON Parse Error ===');
       console.error('Error:', e);
       console.error('Raw Content:', data.choices[0].message.content);
-      
-      // 记录 JSON 解析错误日志
-      sendLogToCloudflare({
-        type: 'error',
-        message: 'Failed to parse AI response as JSON',
-        path: '/api/grammar-check',
-        error: e instanceof Error ? e.message : 'Unknown error',
-        rawContent: data.choices[0].message.content.substring(0, 500),
-        processingTime: Date.now() - startTime
-      });
-      
       throw new Error('Failed to parse AI response as JSON');
     }
 
@@ -299,38 +262,13 @@ export async function POST(request: NextRequest) {
     sendLogToCloudflare({
       type: 'final_result',
       path: '/api/grammar-check',
-      result: {
-        isCorrect: finalResult.isCorrect,
-        textLength: finalResult.text.length,
-        correctedTextLength: finalResult.correctedText.length,
-        explanationsCount: finalResult.explanations.length,
-        explanations: finalResult.explanations,
-        fullResult: JSON.stringify(finalResult).substring(0, 1000) // 限制长度但尽量保留完整信息
-      },
-      processingTime: Date.now() - startTime
-    });
-
-    // 记录成功响应日志
-    sendLogToCloudflare({
-      type: 'success',
-      path: '/api/grammar-check',
-      isCorrect: llmResponse.isCorrect,
-      errorCount: llmResponse.explanations.length,
+      result: finalResult,
       processingTime: Date.now() - startTime
     });
 
     return NextResponse.json(finalResult);
   } catch (error: unknown) {
     console.error('Error during grammar check:', error);
-    
-    // 记录未捕获的错误日志
-    sendLogToCloudflare({
-      type: 'uncaught_error',
-      message: error instanceof Error ? error.message : 'Unknown error',
-      path: '/api/grammar-check',
-      stack: error instanceof Error ? error.stack : undefined,
-      processingTime: Date.now() - startTime
-    });
     
     return NextResponse.json(
       { error: `Error during grammar check: ${error instanceof Error ? error.message : 'Unknown error'}` },

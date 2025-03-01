@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "worker:dev": "wrangler dev",
-    "worker:deploy": "wrangler deploy"
+    "worker:deploy": "wrangler deploy",
+    "db:migrate": "wrangler d1 migrations apply grammar-checker-logs",
+    "db:migrate-kv": "node scripts/migrate-kv-to-d1.js"
   },
   "dependencies": {
     "@next/third-parties": "^15.1.7",
