@@ -2,3 +2,8 @@ name = "chinese-grammar-checker"
 main = "worker/index.ts"
 compatibility_date = "2023-12-01"
 
+# KV命名空间配置
+[[kv_namespaces]]
+binding = "chinese-grammar-checker-LOGS" # 在Worker中使用的变量名
+id = "8c514cc9685f488c81b2447250edcd76" # 替换为你的KV命名空间ID
+

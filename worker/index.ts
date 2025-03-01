@@ -1,5 +1,14 @@
+// 导入Cloudflare Workers类型
+import { KVNamespace, KVNamespaceListOptions } from '@cloudflare/workers-types';
+
 export interface Env {
-  // 如果有绑定，在这里声明它们
+  // KV命名空间绑定
+  API_LOGS: KVNamespace;
+}
+
+// 生成唯一的日志ID
+function generateLogId(): string {
+  return Date.now().toString() + '-' + Math.random().toString(36).substring(2, 15);
 }
 
 export default {
@@ -8,6 +17,75 @@ export default {
     env: Env,
     ctx: any
   ): Promise<Response> {
+    // 记录请求开始时间
+    const startTime = Date.now();
+    const url = new URL(request.url);
+    const path = url.pathname;
+    const method = request.method;
+    const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
+    const userAgent = request.headers.get('User-Agent') || 'unknown';
+    
+    // 处理日志查询API
+    if (path === '/api/logs') {
+      // 只允许GET请求查询日志
+      if (method !== 'GET') {
+        return new Response('Method not allowed', { status: 405 });
+      }
+      
+      // 简单的认证检查（实际应用中应使用更安全的认证方式）
+      const authHeader = request.headers.get('Authorization');
+      if (!authHeader || authHeader !== 'Bearer your-secret-token') {
+        return new Response('Unauthorized', { status: 401 });
+      }
+      
+      try {
+        // 获取查询参数
+        const limit = parseInt(url.searchParams.get('limit') || '100');
+        const prefix = url.searchParams.get('prefix') || '';
+        
+        // 列出日志条目
+        const listOptions: KVNamespaceListOptions = {
+          limit: Math.min(limit, 1000), // 限制最大返回数量
+        };
+        
+        if (prefix) {
+          listOptions.prefix = prefix;
+        }
+        
+        const logsList = await env.API_LOGS.list(listOptions);
+        
+        // 如果需要获取完整日志内容
+        if (url.searchParams.get('full') === 'true') {
+          const logEntries = await Promise.all(
+            logsList.keys.map(async (key) => {
+              const value = await env.API_LOGS.get(key.name);
+              return {
+                key: key.name,
+                value: value ? JSON.parse(value) : null
+              };
+            })
+          );
+          
+          return new Response(JSON.stringify(logEntries), {
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        
+        // 否则只返回键列表
+        return new Response(JSON.stringify(logsList), {
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } catch (error) {
+        return new Response(
+          JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
+          { 
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+      }
+    }
+    
     // 处理 CORS 预检请求
     if (request.method === "OPTIONS") {
       return new Response(null, {
@@ -21,6 +99,21 @@ export default {
 
     // 只接受 POST 请求
     if (request.method !== "POST") {
+      // 记录非法请求日志
+      const logEntry = {
+        timestamp: new Date().toISOString(),
+        path,
+        method,
+        clientIP,
+        userAgent,
+        status: 405,
+        message: "Method not allowed",
+        processingTime: Date.now() - startTime
+      };
+      
+      // 使用waitUntil确保日志写入不会阻塞响应
+      ctx.waitUntil(env.API_LOGS.put(generateLogId(), JSON.stringify(logEntry)));
+      
       return new Response("Method not allowed", { status: 405 });
     }
 
@@ -35,6 +128,21 @@ export default {
         success: true
       };
 
+      // 记录成功请求日志
+      const logEntry = {
+        timestamp: new Date().toISOString(),
+        path,
+        method,
+        clientIP,
+        userAgent,
+        status: 200,
+        requestData: { text: data.text.substring(0, 100) + (data.text.length > 100 ? '...' : '') }, // 只记录部分文本
+        processingTime: Date.now() - startTime
+      };
+      
+      // 使用waitUntil确保日志写入不会阻塞响应
+      ctx.waitUntil(env.API_LOGS.put(generateLogId(), JSON.stringify(logEntry)));
+
       return new Response(JSON.stringify(response), {
         headers: {
           "Content-Type": "application/json",
@@ -42,6 +150,21 @@ export default {
         },
       });
     } catch (error) {
+      // 记录错误日志
+      const logEntry = {
+        timestamp: new Date().toISOString(),
+        path,
+        method,
+        clientIP,
+        userAgent,
+        status: 400,
+        error: error instanceof Error ? error.message : "Unknown error",
+        processingTime: Date.now() - startTime
+      };
+      
+      // 使用waitUntil确保日志写入不会阻塞响应
+      ctx.waitUntil(env.API_LOGS.put(generateLogId(), JSON.stringify(logEntry)));
+      
       return new Response(
         JSON.stringify({ 
           success: false, 
