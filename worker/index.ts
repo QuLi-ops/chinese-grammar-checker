@@ -27,6 +27,42 @@ export default {
     const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
     const userAgent = request.headers.get('User-Agent') || 'unknown';
     
+    // 添加调试日志
+    console.log(`处理请求: ${method} ${path}`);
+    console.log(`KV绑定是否存在: ${"chinese-grammar-checker-LOGS" in env}`);
+    
+    // 添加测试端点，直接写入和读取KV
+    if (path === '/api/test-kv') {
+      try {
+        const testKey = 'test-' + Date.now();
+        const testValue = { timestamp: new Date().toISOString(), test: true };
+        
+        console.log(`测试KV写入，键: ${testKey}`);
+        await env["chinese-grammar-checker-LOGS"].put(testKey, JSON.stringify(testValue));
+        
+        console.log(`测试KV读取，键: ${testKey}`);
+        const readValue = await env["chinese-grammar-checker-LOGS"].get(testKey);
+        
+        return new Response(JSON.stringify({
+          success: true,
+          testKey,
+          written: testValue,
+          read: readValue ? JSON.parse(readValue) : null
+        }), {
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } catch (error) {
+        console.error(`测试KV时出错:`, error);
+        return new Response(JSON.stringify({
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error'
+        }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+    
     // 处理日志查询API
     if (path === '/api/logs') {
       // 只允许GET请求查询日志
@@ -55,7 +91,9 @@ export default {
           listOptions.prefix = prefix;
         }
         
+        console.log(`尝试列出KV日志，参数:`, listOptions);
         const logsList = await env["chinese-grammar-checker-LOGS"].list(listOptions);
+        console.log(`KV日志列表结果:`, logsList);
         
         // 如果需要获取完整日志内容
         if (url.searchParams.get('full') === 'true') {
@@ -79,6 +117,7 @@ export default {
           headers: { 'Content-Type': 'application/json' }
         });
       } catch (error) {
+        console.error(`获取日志时出错:`, error);
         return new Response(
           JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
           { 
@@ -115,7 +154,17 @@ export default {
       };
       
       // 使用waitUntil确保日志写入不会阻塞响应
-      ctx.waitUntil(env["chinese-grammar-checker-LOGS"].put(generateLogId(), JSON.stringify(logEntry)));
+      try {
+        console.log(`尝试写入非法请求日志:`, logEntry);
+        const logId = generateLogId();
+        ctx.waitUntil(
+          env["chinese-grammar-checker-LOGS"].put(logId, JSON.stringify(logEntry))
+            .then(() => console.log(`成功写入日志，ID: ${logId}`))
+            .catch(err => console.error(`写入日志失败:`, err))
+        );
+      } catch (error) {
+        console.error(`waitUntil执行出错:`, error);
+      }
       
       return new Response("Method not allowed", { status: 405 });
     }
@@ -144,7 +193,17 @@ export default {
       };
       
       // 使用waitUntil确保日志写入不会阻塞响应
-      ctx.waitUntil(env["chinese-grammar-checker-LOGS"].put(generateLogId(), JSON.stringify(logEntry)));
+      try {
+        console.log(`尝试写入成功请求日志:`, logEntry);
+        const logId = generateLogId();
+        ctx.waitUntil(
+          env["chinese-grammar-checker-LOGS"].put(logId, JSON.stringify(logEntry))
+            .then(() => console.log(`成功写入日志，ID: ${logId}`))
+            .catch(err => console.error(`写入日志失败:`, err))
+        );
+      } catch (error) {
+        console.error(`waitUntil执行出错:`, error);
+      }
 
       return new Response(JSON.stringify(response), {
         headers: {
@@ -166,7 +225,17 @@ export default {
       };
       
       // 使用waitUntil确保日志写入不会阻塞响应
-      ctx.waitUntil(env["chinese-grammar-checker-LOGS"].put(generateLogId(), JSON.stringify(logEntry)));
+      try {
+        console.log(`尝试写入错误日志:`, logEntry);
+        const logId = generateLogId();
+        ctx.waitUntil(
+          env["chinese-grammar-checker-LOGS"].put(logId, JSON.stringify(logEntry))
+            .then(() => console.log(`成功写入日志，ID: ${logId}`))
+            .catch(err => console.error(`写入日志失败:`, err))
+        );
+      } catch (error) {
+        console.error(`waitUntil执行出错:`, error);
+      }
       
       return new Response(
         JSON.stringify({ 

@@ -11,3 +11,7 @@ id = "8c514cc9685f488c81b2447250edcd76" # 替换为你的KV命名空间ID
 [vars]
 API_LOGS_TOKEN = "my-secure-api-logs-token-2025" # 在生产环境中应使用更复杂的令牌
 
+# 可观测性配置
+[observability]
+enabled = true
+
