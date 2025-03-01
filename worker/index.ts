@@ -1,8 +1,5 @@
-type KVNamespace = /*unresolved*/ any
-
 export interface Env {
   // 如果有绑定，在这里声明它们
-  LOGS: KVNamespace;
 }
 
 export default {
@@ -30,17 +27,6 @@ export default {
     try {
       const data = await request.json();
       
-      // 生成唯一的日志 ID
-      const logId = `log_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-      
-      // 记录日志到 KV
-      await env.LOGS.put(logId, JSON.stringify({
-        timestamp: new Date().toISOString(),
-        data: data,
-        userAgent: request.headers.get('User-Agent'),
-        ip: request.headers.get('CF-Connecting-IP')
-      }));
-      
       // 中文语法检查逻辑
       const response = {
         original: data.text,
@@ -56,13 +42,6 @@ export default {
         },
       });
     } catch (error) {
-      // 记录错误
-      const errorId = `error_${Date.now()}`;
-      await env.LOGS.put(errorId, JSON.stringify({
-        timestamp: new Date().toISOString(),
-        error: error instanceof Error ? error.message : 'Unknown error'
-      }));
-      
       return new Response(
         JSON.stringify({ 
           success: false, 
