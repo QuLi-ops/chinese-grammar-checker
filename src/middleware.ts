@@ -67,8 +67,8 @@ export async function middleware(request: NextRequest) {
           path: request.nextUrl.pathname,
           status: response.status
         }),
-      }).catch(error => console.error('Failed to send log to Worker:', error))
-    );
+      }).catch(error => console.error('Failed to send log to Worker:', error));
+    
     
     return response;
   }
