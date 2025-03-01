@@ -1,6 +1,6 @@
 import createMiddleware from 'next-intl/middleware';
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import type { NextRequest, NextFetchEvent } from 'next/server';
 
 // 创建中间件，处理国际化路由
 export default createMiddleware({
@@ -14,7 +14,7 @@ export default createMiddleware({
 
 const LOG_WORKER_URL = process.env.LOG_WORKER_URL || 'https://chinese-grammar-checker.your-subdomain.workers.dev';
 
-export async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest, event: NextFetchEvent) {
   // 只处理 API 请求
   if (request.nextUrl.pathname.startsWith('/api/')) {
     const requestId = crypto.randomUUID();
@@ -25,7 +25,8 @@ export async function middleware(request: NextRequest) {
     let requestBody;
     try {
       requestBody = await requestClone.json();
-    } catch (_e) {
+    } catch {
+      // 忽略错误，将 requestBody 设为 null
       requestBody = null;
     }
     
@@ -52,9 +53,9 @@ export async function middleware(request: NextRequest) {
     // 继续处理请求
     const response = NextResponse.next();
     
-    // 在响应返回后记录响应日志
-    // NextResponse 没有 waitUntil 方法，直接发送日志请求
-    fetch(LOG_WORKER_URL, {
+    // 使用 event.waitUntil 而不是 response.waitUntil
+    event.waitUntil(
+      fetch(LOG_WORKER_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,8 +68,8 @@ export async function middleware(request: NextRequest) {
           path: request.nextUrl.pathname,
           status: response.status
         }),
-      }).catch(error => console.error('Failed to send log to Worker:', error));
-    
+      }).catch(error => console.error('Failed to send log to Worker:', error))
+    );
     
     return response;
   }
@@ -76,8 +77,7 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
+// 正确的 config 导出格式
 export const config = {
-  // 匹配所有需要国际化的路径
-  matcher: ['/((?!api|_next|.*\\..*).*)'],
-  middleware: [middleware],
+  matcher: ['/api/:path*']
 }; 
