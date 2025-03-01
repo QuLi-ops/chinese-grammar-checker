@@ -65,6 +65,56 @@ export default {
     
     // 处理日志查询API
     if (path === '/api/logs') {
+      // 处理 POST 请求 - 接收来自 Next.js API 路由的日志
+      if (method === 'POST') {
+        // 使用环境变量中的令牌进行认证检查
+        const authHeader = request.headers.get('Authorization');
+        const expectedToken = env.API_LOGS_TOKEN || 'my-secure-api-logs-token-2025'; // 如果环境变量未设置，使用默认值
+        if (!authHeader || authHeader !== `Bearer ${expectedToken}`) {
+          return new Response('Unauthorized', { status: 401 });
+        }
+        
+        try {
+          const data = await request.json();
+          
+          // 添加额外的日志信息
+          const logEntry = {
+            timestamp: new Date().toISOString(),
+            source: 'next-api',
+            clientIP,
+            userAgent,
+            ...data
+          };
+          
+          // 生成日志ID并存储日志
+          const logId = generateLogId();
+          console.log(`接收到来自 Next.js API 的日志:`, logEntry);
+          
+          await env["chinese-grammar-checker-LOGS"].put(logId, JSON.stringify(logEntry));
+          console.log(`成功存储 Next.js API 日志，ID: ${logId}`);
+          
+          return new Response(JSON.stringify({ 
+            success: true, 
+            message: 'Log stored successfully',
+            logId
+          }), {
+            headers: { 'Content-Type': 'application/json' }
+          });
+        } catch (error) {
+          console.error(`存储 Next.js API 日志时出错:`, error);
+          return new Response(
+            JSON.stringify({ 
+              success: false, 
+              error: error instanceof Error ? error.message : 'Unknown error' 
+            }),
+            { 
+              status: 500,
+              headers: { 'Content-Type': 'application/json' }
+            }
+          );
+        }
+      }
+      
       // 只允许GET请求查询日志
       if (method !== 'GET') {
         return new Response('Method not allowed', { status: 405 });
@@ -134,7 +184,7 @@ export default {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
         },
       });
     }
