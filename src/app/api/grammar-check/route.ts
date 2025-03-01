@@ -6,8 +6,16 @@ const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const LOGS_API_URL = 'https://chinese-grammar-checker.quli1016908036.workers.dev/api/logs';
 const LOGS_API_TOKEN = 'my-secure-api-logs-token-2025';
 
+// 定义日志数据接口
+interface LogData {
+  type: string;
+  path: string;
+  processingTime: number;
+  [key: string]: unknown;
+}
+
 // 发送日志到 Cloudflare Worker
-async function sendLogToCloudflare(logData: any) {
+async function sendLogToCloudflare(logData: LogData) {
   try {
     console.log('正在发送日志到 Cloudflare Worker:', logData);
     
@@ -92,7 +100,8 @@ export async function POST(request: NextRequest) {
         style,
         responseLanguage
       },
-      status: 200
+      status: 200,
+      processingTime: Date.now() - startTime
     });
 
     const messages = constructPrompt(text, style, responseLanguage);
