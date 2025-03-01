@@ -16,16 +16,22 @@
    ```
    或手动创建：
    ```bash
-   wrangler kv:namespace create API_LOGS
-   wrangler kv:namespace create API_LOGS --preview
+   wrangler kv:namespace create chinese-grammar-checker-LOGS
+   wrangler kv:namespace create chinese-grammar-checker-LOGS --preview
    ```
 
 3. 更新`wrangler.toml`文件，添加KV命名空间配置：
    ```toml
    [[kv_namespaces]]
-   binding = "API_LOGS"
+   binding = "chinese-grammar-checker-LOGS"
    id = "your-kv-namespace-id"
    preview_id = "your-preview-kv-namespace-id"
+   ```
+
+4. 设置API日志访问令牌（在`wrangler.toml`中）：
+   ```toml
+   [vars]
+   API_LOGS_TOKEN = "your-secure-token"
    ```
 
 ## 日志记录内容
@@ -57,8 +63,10 @@ GET /api/logs?limit=100&prefix=2023-01&full=true
 
 请求头：
 ```
-Authorization: Bearer your-secret-token
+Authorization: Bearer my-secure-api-logs-token-2025
 ```
+
+**注意**：这个令牌值必须与`wrangler.toml`中设置的`API_LOGS_TOKEN`环境变量值相匹配。
 
 ## 安全注意事项
 
@@ -66,16 +74,17 @@ Authorization: Bearer your-secret-token
 2. 避免在日志中存储敏感个人信息
 3. 定期清理旧日志，避免KV存储空间过大
 4. 考虑设置日志过期时间
+5. 使用复杂的随机令牌，并定期更换
 
 ## 日志管理
 
 清理旧日志：
 ```bash
 # 列出所有日志键
-wrangler kv:key list --binding=API_LOGS
+wrangler kv:key list --binding=chinese-grammar-checker-LOGS
 
 # 删除特定日志
-wrangler kv:key delete --binding=API_LOGS "log-key-to-delete"
+wrangler kv:key delete --binding=chinese-grammar-checker-LOGS "log-key-to-delete"
 ```
 
 ## 故障排除

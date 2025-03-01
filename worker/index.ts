@@ -3,7 +3,9 @@ import { KVNamespace, KVNamespaceListOptions } from '@cloudflare/workers-types';
 
 export interface Env {
   // KV命名空间绑定
-  API_LOGS: KVNamespace;
+  "chinese-grammar-checker-LOGS": KVNamespace;
+  // 环境变量
+  API_LOGS_TOKEN: string;
 }
 
 // 生成唯一的日志ID
@@ -32,9 +34,10 @@ export default {
         return new Response('Method not allowed', { status: 405 });
       }
       
-      // 简单的认证检查（实际应用中应使用更安全的认证方式）
+      // 使用环境变量中的令牌进行认证检查
       const authHeader = request.headers.get('Authorization');
-      if (!authHeader || authHeader !== 'Bearer your-secret-token') {
+      const expectedToken = env.API_LOGS_TOKEN || 'my-secure-api-logs-token-2025'; // 如果环境变量未设置，使用默认值
+      if (!authHeader || authHeader !== `Bearer ${expectedToken}`) {
         return new Response('Unauthorized', { status: 401 });
       }
       
@@ -52,13 +55,13 @@ export default {
           listOptions.prefix = prefix;
         }
         
-        const logsList = await env.API_LOGS.list(listOptions);
+        const logsList = await env["chinese-grammar-checker-LOGS"].list(listOptions);
         
         // 如果需要获取完整日志内容
         if (url.searchParams.get('full') === 'true') {
           const logEntries = await Promise.all(
             logsList.keys.map(async (key) => {
-              const value = await env.API_LOGS.get(key.name);
+              const value = await env["chinese-grammar-checker-LOGS"].get(key.name);
               return {
                 key: key.name,
                 value: value ? JSON.parse(value) : null
@@ -112,7 +115,7 @@ export default {
       };
       
       // 使用waitUntil确保日志写入不会阻塞响应
-      ctx.waitUntil(env.API_LOGS.put(generateLogId(), JSON.stringify(logEntry)));
+      ctx.waitUntil(env["chinese-grammar-checker-LOGS"].put(generateLogId(), JSON.stringify(logEntry)));
       
       return new Response("Method not allowed", { status: 405 });
     }
@@ -141,7 +144,7 @@ export default {
       };
       
       // 使用waitUntil确保日志写入不会阻塞响应
-      ctx.waitUntil(env.API_LOGS.put(generateLogId(), JSON.stringify(logEntry)));
+      ctx.waitUntil(env["chinese-grammar-checker-LOGS"].put(generateLogId(), JSON.stringify(logEntry)));
 
       return new Response(JSON.stringify(response), {
         headers: {
@@ -163,7 +166,7 @@ export default {
       };
       
       // 使用waitUntil确保日志写入不会阻塞响应
-      ctx.waitUntil(env.API_LOGS.put(generateLogId(), JSON.stringify(logEntry)));
+      ctx.waitUntil(env["chinese-grammar-checker-LOGS"].put(generateLogId(), JSON.stringify(logEntry)));
       
       return new Response(
         JSON.stringify({ 
