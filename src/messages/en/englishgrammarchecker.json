@@ -1,4 +1,18 @@
 {
+  "meta": {
+    "title": "English Grammar Checker - Professional Writing Assistant",
+    "description": "Free online English grammar checker. Advanced AI-powered tool for checking English grammar, style, and tone. Perfect for students, professionals, and English learners.",
+    "keywords": "English grammar checker, English writing assistant, grammar correction, English proofreading, AI grammar tool",
+    "og": {
+      "title": "English Grammar Checker - Professional Writing Assistant",
+      "description": "Advanced AI-powered English grammar checking tool. Perfect for students, professionals, and English learners.",
+      "alt": "English Grammar Checker"
+    },
+    "twitter": {
+      "title": "English Grammar Checker - Professional Writing Assistant",
+      "description": "Advanced AI-powered English grammar checking tool. Perfect for students, professionals, and English learners."
+    }
+  },
   "title": "Professional English Grammar Checker",
   "subtitle": "Advanced AI-powered tool for checking English grammar, style, and tone. Perfect for students, professionals, and English learners.",
   "whyUse": {

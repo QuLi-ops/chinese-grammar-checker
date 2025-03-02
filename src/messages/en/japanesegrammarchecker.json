@@ -1,4 +1,18 @@
 {
+  "meta": {
+    "title": "Japanese Grammar Checker - Professional Writing Assistant",
+    "description": "Free online Japanese grammar checker. Advanced AI-powered tool for checking Japanese grammar, style, and tone. Perfect for students, professionals, and Japanese learners.",
+    "keywords": "Japanese grammar checker, Japanese writing assistant, grammar correction, Japanese proofreading, AI grammar tool",
+    "og": {
+      "title": "Japanese Grammar Checker - Professional Writing Assistant",
+      "description": "Advanced AI-powered Japanese grammar checking tool. Perfect for students, professionals, and Japanese learners.",
+      "alt": "Japanese Grammar Checker"
+    },
+    "twitter": {
+      "title": "Japanese Grammar Checker - Professional Writing Assistant",
+      "description": "Advanced AI-powered Japanese grammar checking tool. Perfect for students, professionals, and Japanese learners."
+    }
+  },
   "title": "Professional Japanese Grammar Checker",
   "subtitle": "Advanced AI-powered tool for checking Japanese grammar, style, and tone. Perfect for students, professionals, and Japanese learners.",
   "whyUse": {

@@ -1,4 +1,18 @@
 {
+  "meta": {
+    "title": "Korean Grammar Checker - Professional Writing Assistant",
+    "description": "Free online Korean grammar checker. Advanced AI-powered tool for checking Korean grammar, style, and tone. Perfect for students, professionals, and Korean learners.",
+    "keywords": "Korean grammar checker, Korean writing assistant, grammar correction, Korean proofreading, AI grammar tool",
+    "og": {
+      "title": "Korean Grammar Checker - Professional Writing Assistant",
+      "description": "Advanced AI-powered Korean grammar checking tool. Perfect for students, professionals, and Korean learners.",
+      "alt": "Korean Grammar Checker"
+    },
+    "twitter": {
+      "title": "Korean Grammar Checker - Professional Writing Assistant",
+      "description": "Advanced AI-powered Korean grammar checking tool. Perfect for students, professionals, and Korean learners."
+    }
+  },
   "title": "Professional Korean Grammar Checker",
   "subtitle": "Advanced AI-powered tool for checking Korean grammar, style, and tone. Perfect for students, professionals, and Korean learners.",
   "whyUse": {
