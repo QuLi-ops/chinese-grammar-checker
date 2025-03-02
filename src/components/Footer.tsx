@@ -12,7 +12,8 @@ export default function Footer() {
     { href: '/', label: t('chineseGrammarChecker') },
     { href: '/japanese-grammar-checker', label: t('japaneseGrammarChecker') },
     { href: '/korean-grammar-checker', label: t('koreanGrammarChecker') },
-    { href: '/english-grammar-checker', label: t('englishGrammarChecker') }
+    { href: '/english-grammar-checker', label: t('englishGrammarChecker') },
+    { href: '/blog', label: t('blog') }
   ];
   
   return (

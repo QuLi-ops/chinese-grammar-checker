@@ -24,12 +24,16 @@ export default getRequestConfig(async ({requestLocale}) => {
   // 加载英语语法检查器翻译文件
   const englishGrammarCheckerMessages = (await import(`../messages/${resolvedLocale}/englishgrammarchecker.json`)).default;
 
+  // 加载博客翻译文件
+  const blogMessages = (await import(`../messages/${resolvedLocale}/blog.json`)).default;
+
   return {
     messages: {
       ...commonMessages,
       japanesegrammarchecker: japaneseGrammarCheckerMessages,
       koreangrammarchecker: koreanGrammarCheckerMessages,
-      englishgrammarchecker: englishGrammarCheckerMessages
+      englishgrammarchecker: englishGrammarCheckerMessages,
+      blog: blogMessages
     },
     locale: resolvedLocale,
     timeZone: 'Asia/Shanghai'

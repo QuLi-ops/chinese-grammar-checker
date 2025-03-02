@@ -21,13 +21,17 @@ export default getRequestConfig(async ({requestLocale}) => {
   // 加载英语语法检查器翻译文件
   const englishGrammarCheckerMessages = (await import(`../messages/${locale}/englishgrammarchecker.json`)).default;
 
+  // 加载博客翻译文件
+  const blogMessages = (await import(`../messages/${locale}/blog.json`)).default;
+
   return {
     locale,
     messages: {
       ...commonMessages,
       japanesegrammarchecker: japaneseGrammarCheckerMessages,
       koreangrammarchecker: koreanGrammarCheckerMessages,
-      englishgrammarchecker: englishGrammarCheckerMessages
+      englishgrammarchecker: englishGrammarCheckerMessages,
+      blog: blogMessages
     }
   };
 }); 

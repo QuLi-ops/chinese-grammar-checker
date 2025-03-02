@@ -4,10 +4,13 @@
   },
   "nav": {
     "home": "Home",
+    "about": "About",
+    "settings": "Settings",
     "chineseGrammarChecker": "Chinese Grammar Checker",
     "japaneseGrammarChecker": "Japanese Grammar Checker",
     "koreanGrammarChecker": "Korean Grammar Checker",
-    "englishGrammarChecker": "English Grammar Checker"
+    "englishGrammarChecker": "English Grammar Checker",
+    "blog": "Blog"
   },
   "footer": {
     "home": "Home",
@@ -15,6 +18,7 @@
     "japaneseGrammarChecker": "Japanese Grammar Checker",
     "koreanGrammarChecker": "Korean Grammar Checker",
     "englishGrammarChecker": "English Grammar Checker",
+    "blog": "Blog",
     "copyright": "© {year} Grammar Checker. All rights reserved."
   },
   "grammarInput": {
@@ -194,5 +198,13 @@
       }
     },
     "footer": "© 2024 Chinese Grammar Checker. All rights reserved."
+  },
+  "app": {
+    "title": "Chinese Grammar Checker",
+    "description": "An intelligent Chinese grammar checking tool",
+    "input": {
+      "placeholder": "Enter Chinese text here...",
+      "check": "Check Grammar"
+    }
   }
 } 

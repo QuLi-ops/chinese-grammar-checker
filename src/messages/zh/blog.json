@@ -1,0 +1,12 @@
+{
+  "blog": "博客",
+  "noPosts": "暂无博客文章",
+  "categories": "分类",
+  "tags": "标签",
+  "backToBlog": "返回博客列表",
+  "categoryTitle": "分类：{category}",
+  "tagTitle": "标签：{tag}",
+  "noPostsInCategory": "该分类下暂无文章",
+  "noPostsWithTag": "该标签下暂无文章",
+  "readMore": "阅读更多"
+} 

@@ -1,0 +1,12 @@
+{
+  "blog": "Blog",
+  "noPosts": "No blog posts yet",
+  "categories": "Categories",
+  "tags": "Tags",
+  "backToBlog": "Back to blog",
+  "categoryTitle": "Category: {category}",
+  "tagTitle": "Tag: {tag}",
+  "noPostsInCategory": "No posts in this category",
+  "noPostsWithTag": "No posts with this tag",
+  "readMore": "Read more"
+} 
