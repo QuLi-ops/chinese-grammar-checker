@@ -2,6 +2,7 @@ import { getPostsByTag, getAllTags } from '@/lib/blog/utils';
 import PostCard from '@/components/blog/PostCard';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
 
 interface TagPageProps {
   params: Promise<{
@@ -12,7 +13,7 @@ interface TagPageProps {
 
 // 生成静态路径
 export async function generateStaticParams() {
-  const locales = ['zh', 'en'];
+  const locales = ['zh', 'en', 'ja'];
   const paths = [];
 
   for (const locale of locales) {
@@ -27,6 +28,37 @@ export async function generateStaticParams() {
   }
 
   return paths;
+}
+
+// 生成SEO元数据
+export async function generateMetadata({ params }: TagPageProps): Promise<Metadata> {
+  // 在 Next.js 15 中，params 是一个 Promise
+  const { locale, slug } = await params;
+  const t = await getTranslations('blog');
+  const tag = decodeURIComponent(slug);
+  
+  // 构建完整的URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://grammar-checker.com';
+  const canonicalUrl = `${baseUrl}/${locale}/blog/tag/${slug}`;
+  
+  return {
+    title: `${t('tagTitle', { tag })} - Grammar Checker`,
+    description: `${t('tagTitle', { tag })} - Grammar Checker - 浏览标签为${tag}的所有文章`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `${t('tagTitle', { tag })} - Grammar Checker`,
+      description: `${t('tagTitle', { tag })} - Grammar Checker - 浏览标签为${tag}的所有文章`,
+      url: canonicalUrl,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title: `${t('tagTitle', { tag })} - Grammar Checker`,
+      description: `${t('tagTitle', { tag })} - Grammar Checker - 浏览标签为${tag}的所有文章`,
+    }
+  };
 }
 
 export default async function TagPage({ params }: TagPageProps) {

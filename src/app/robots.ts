@@ -1,6 +1,9 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
+  // 使用环境变量中的基础URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://grammar-checker.com';
+  
   return {
     rules: [
       {
@@ -13,7 +16,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: 'https://chinesegrammarchecker.com/sitemap.xml',
-    host: 'https://chinesegrammarchecker.com',
+    sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
   };
 } 

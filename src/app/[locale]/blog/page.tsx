@@ -3,11 +3,47 @@ import PostCard from '@/components/blog/PostCard';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
 
 interface BlogPageProps {
   params: Promise<{
     locale: string;
   }>;
+}
+
+// 生成SEO元数据
+export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
+  // 在 Next.js 15 中，params 是一个 Promise
+  const { locale } = await params;
+  const t = await getTranslations('blog');
+  
+  // 构建完整的URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://grammar-checker.com';
+  const canonicalUrl = `${baseUrl}/${locale}/blog`;
+  
+  return {
+    title: `${t('blog')} - Grammar Checker`,
+    description: `${t('blog')} - Grammar Checker - 语法检查器博客文章、教程和资源`,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        'en': `${baseUrl}/en/blog`,
+        'zh': `${baseUrl}/zh/blog`,
+        'ja': `${baseUrl}/ja/blog`,
+      }
+    },
+    openGraph: {
+      title: `${t('blog')} - Grammar Checker`,
+      description: `${t('blog')} - Grammar Checker - 语法检查器博客文章、教程和资源`,
+      url: canonicalUrl,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title: `${t('blog')} - Grammar Checker`,
+      description: `${t('blog')} - Grammar Checker - 语法检查器博客文章、教程和资源`,
+    }
+  };
 }
 
 export default async function BlogPage({ params }: BlogPageProps) {

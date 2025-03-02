@@ -2,6 +2,7 @@ import { getPostsByCategory, getAllCategories } from '@/lib/blog/utils';
 import PostCard from '@/components/blog/PostCard';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
 
 interface CategoryPageProps {
   params: Promise<{
@@ -12,7 +13,7 @@ interface CategoryPageProps {
 
 // 生成静态路径
 export async function generateStaticParams() {
-  const locales = ['zh', 'en'];
+  const locales = ['zh', 'en', 'ja'];
   const paths = [];
 
   for (const locale of locales) {
@@ -27,6 +28,37 @@ export async function generateStaticParams() {
   }
 
   return paths;
+}
+
+// 生成SEO元数据
+export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
+  // 在 Next.js 15 中，params 是一个 Promise
+  const { locale, slug } = await params;
+  const t = await getTranslations('blog');
+  const category = decodeURIComponent(slug);
+  
+  // 构建完整的URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://grammar-checker.com';
+  const canonicalUrl = `${baseUrl}/${locale}/blog/category/${slug}`;
+  
+  return {
+    title: `${t('categoryTitle', { category })} - Grammar Checker`,
+    description: `${t('categoryTitle', { category })} - Grammar Checker - 浏览${category}分类下的所有文章`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `${t('categoryTitle', { category })} - Grammar Checker`,
+      description: `${t('categoryTitle', { category })} - Grammar Checker - 浏览${category}分类下的所有文章`,
+      url: canonicalUrl,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title: `${t('categoryTitle', { category })} - Grammar Checker`,
+      description: `${t('categoryTitle', { category })} - Grammar Checker - 浏览${category}分类下的所有文章`,
+    }
+  };
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
