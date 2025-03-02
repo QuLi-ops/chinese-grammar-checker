@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link';
 import { BlogPost } from '@/lib/blog/utils';
 
@@ -13,8 +15,21 @@ export default function PostCard({ post, locale }: PostCardProps) {
     day: 'numeric',
   });
 
+  // 处理分类或标签点击，阻止事件冒泡
+  const handleTagClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  // 处理卡片点击，导航到文章详情页
+  const navigateToPost = () => {
+    window.location.href = `/${locale}/blog/${post.slug}`;
+  };
+
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <div 
+      onClick={navigateToPost}
+      className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 transform active:scale-95 active:translate-y-0.5 cursor-pointer"
+    >
       <div className="p-6">
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
           <span>{formattedDate}</span>
@@ -22,9 +37,7 @@ export default function PostCard({ post, locale }: PostCardProps) {
           <span>{post.author}</span>
         </div>
         
-        <Link href={`/blog/${post.slug}`} locale={locale} className="block">
-          <h2 className="text-xl font-bold mb-2 hover:text-blue-600 transition-colors">{post.title}</h2>
-        </Link>
+        <h2 className="text-xl font-bold mb-2 text-gray-900">{post.title}</h2>
         
         {post.excerpt && (
           <p className="text-gray-600 mb-4">{post.excerpt}</p>
@@ -37,6 +50,7 @@ export default function PostCard({ post, locale }: PostCardProps) {
               href={`/blog/category/${encodeURIComponent(category)}`} 
               locale={locale}
               className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full hover:bg-blue-200 transition-colors"
+              onClick={handleTagClick}
             >
               {category}
             </Link>
@@ -48,6 +62,7 @@ export default function PostCard({ post, locale }: PostCardProps) {
               href={`/blog/tag/${encodeURIComponent(tag)}`} 
               locale={locale}
               className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full hover:bg-gray-200 transition-colors"
+              onClick={handleTagClick}
             >
               #{tag}
             </Link>
