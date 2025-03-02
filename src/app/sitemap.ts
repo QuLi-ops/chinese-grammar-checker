@@ -1,6 +1,24 @@
 import { MetadataRoute } from 'next';
 import { getAllPosts, getAllCategories, getAllTags } from '@/lib/blog/utils';
 
+// 辅助函数：安全创建日期对象
+function safeDate(dateString: string | undefined | null): Date {
+  if (!dateString) {
+    return new Date(); // 如果没有日期，返回当前日期
+  }
+  
+  try {
+    const date = new Date(dateString);
+    // 检查日期是否有效
+    if (isNaN(date.getTime())) {
+      return new Date(); // 如果日期无效，返回当前日期
+    }
+    return date;
+  } catch {
+    return new Date(); // 如果解析出错，返回当前日期
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 基础URL
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://grammar-checker.com';
@@ -140,7 +158,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const posts = await getAllPosts(locale);
       return posts.map(post => ({
         url: `${baseUrl}/${locale}/blog/${post.slug}`,
-        lastModified: new Date(post.date),
+        lastModified: safeDate(post.date),
         changeFrequency: 'monthly' as const,
         priority: 0.7,
       }));

@@ -1,7 +1,6 @@
 import { getAllPosts, getAllCategories, getAllTags } from '@/lib/blog/utils';
 import PostCard from '@/components/blog/PostCard';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 
