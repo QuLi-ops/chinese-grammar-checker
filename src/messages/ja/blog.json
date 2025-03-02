@@ -1,0 +1,12 @@
+{
+  "blog": "ブログ",
+  "noPosts": "まだブログ記事がありません",
+  "categories": "カテゴリー",
+  "tags": "タグ",
+  "backToBlog": "ブログに戻る",
+  "categoryTitle": "カテゴリー：{category}",
+  "tagTitle": "タグ：{tag}",
+  "noPostsInCategory": "このカテゴリーには記事がありません",
+  "noPostsWithTag": "このタグの記事はありません",
+  "readMore": "続きを読む"
+} 

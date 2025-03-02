@@ -5,14 +5,14 @@ import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 
 interface BlogPageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
 export default async function BlogPage({ params }: BlogPageProps) {
-  // 确保 locale 是有效的
-  const locale = params.locale;
+  // 确保 locale 是有效的，在 Next.js 15 中，params 是一个 Promise
+  const { locale } = await params;
   const t = await getTranslations('blog');
   const posts = await getAllPosts(locale);
   const categories = await getAllCategories(locale);

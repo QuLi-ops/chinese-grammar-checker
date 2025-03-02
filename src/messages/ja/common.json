@@ -11,7 +11,9 @@
     "japaneseGrammarChecker": "日本語文法チェッカー",
     "koreanGrammarChecker": "韓国語文法チェッカー",
     "englishGrammarChecker": "英語文法チェッカー",
-    "sitemap": "サイトマップ"
+    "sitemap": "サイトマップ",
+    "blog": "ブログ",
+    "grammarCheckers": "文法チェックツール"
   },
   "footer": {
     "home": "ホーム",
@@ -20,6 +22,7 @@
     "koreanGrammarChecker": "韓国語文法チェッカー",
     "englishGrammarChecker": "英語文法チェッカー",
     "sitemap": "サイトマップ",
+    "blog": "ブログ",
     "copyright": "© {year} 文法チェッカー。全著作権所有。"
   },
   "languageSwitcher": {

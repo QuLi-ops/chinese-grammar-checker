@@ -15,7 +15,8 @@
     "japaneseGrammarChecker": "日语语法检查器",
     "koreanGrammarChecker": "韩语语法检查器",
     "englishGrammarChecker": "英语语法检查器",
-    "blog": "博客"
+    "blog": "博客",
+    "grammarCheckers": "语法检查工具"
   },
   "footer": {
     "home": "首页",

@@ -10,7 +10,8 @@
     "japaneseGrammarChecker": "Japanese Grammar Checker",
     "koreanGrammarChecker": "Korean Grammar Checker",
     "englishGrammarChecker": "English Grammar Checker",
-    "blog": "Blog"
+    "blog": "Blog",
+    "grammarCheckers": "Grammar Checkers"
   },
   "footer": {
     "home": "Home",
