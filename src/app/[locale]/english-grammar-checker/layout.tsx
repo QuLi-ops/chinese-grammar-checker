@@ -1,8 +1,11 @@
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const t = await getTranslations({ locale: params.locale, namespace: 'englishgrammarchecker' });
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  // 在 Next.js 15 中，params 是一个 Promise，必须 await
+  const { locale } = await params;
+  
+  const t = await getTranslations({ locale: locale, namespace: 'englishgrammarchecker' });
   
   return {
     title: t('meta.title'),
@@ -26,7 +29,7 @@ export async function generateMetadata({ params }: { params: { locale: string } 
       description: t('meta.twitter.description'),
     },
     alternates: {
-      canonical: `https://chinesegrammarchecker.com/${params.locale}/english-grammar-checker`
+      canonical: `https://chinesegrammarchecker.com/${locale}/english-grammar-checker`
     }
   };
 }
