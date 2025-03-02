@@ -36,6 +36,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250224.0",
     "@eslint/eslintrc": "^3",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
