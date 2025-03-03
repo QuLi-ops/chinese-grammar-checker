@@ -70,7 +70,7 @@ export default function PostContent({ post, locale }: PostContentProps) {
               
               return <p>{children}</p>;
             },
-            img: ({ node, src, alt, className, ...props }) => {
+            img: ({ src, alt, className }) => {
               if (!src) return null;
               return (
                 <span className={`relative block w-full h-[400px] ${className || ''}`}>
