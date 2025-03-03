@@ -1,7 +1,10 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeAttr from 'rehype-attr';
 import Link from 'next/link';
+import Image from 'next/image';
 import { BlogPost } from '@/lib/blog/utils';
+import React from 'react';
 
 interface PostContentProps {
   post: BlogPost;
@@ -51,7 +54,38 @@ export default function PostContent({ post, locale }: PostContentProps) {
       </header>
       
       <div className="prose prose-lg max-w-none">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        <ReactMarkdown 
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeAttr]}
+          components={{
+            p: ({ children }) => {
+              // 检查子元素是否包含图片
+              const hasImage = React.Children.toArray(children).some(
+                child => React.isValidElement(child) && child.type === 'img'
+              );
+              
+              if (hasImage) {
+                return <div className="my-8">{children}</div>;
+              }
+              
+              return <p>{children}</p>;
+            },
+            img: ({ node, src, alt, className, ...props }) => {
+              if (!src) return null;
+              return (
+                <span className={`relative block w-full h-[400px] ${className || ''}`}>
+                  <Image
+                    src={src}
+                    alt={alt || ''}
+                    fill
+                    className={`object-cover rounded-lg ${className || ''}`}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </span>
+              );
+            }
+          }}
+        >
           {post.content}
         </ReactMarkdown>
       </div>
