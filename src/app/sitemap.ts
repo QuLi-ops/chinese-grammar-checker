@@ -9,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 创建站点地图条目数组
   const entries: MetadataRoute.Sitemap = [];
   
-  // 添加主域名
+  // 添加主域名（即使它会被301重定向到/en，但仍需在sitemap中保留）
   entries.push({
     url: baseUrl,
     lastModified: now,
