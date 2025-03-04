@@ -19,10 +19,18 @@ export async function generateMetadata({
   // 获取基础URL
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://chinesegrammarchecker.com';
   
+  // 获取消息资源
+  const messages = await getMessages();
+  
+  // 安全地访问元数据
+  const metadata = messages as any;
+  
   return {
+    title: metadata.metadata?.title || "Chinese Grammar Checker",
+    description: metadata.metadata?.description || "AI-powered grammar checking tool",
     // 添加规范链接，使用当前页面的语言
     alternates: {
-      canonical: `${baseUrl}/${locale}`,
+      canonical: `${baseUrl}/${locale}`
     }
   };
 }
