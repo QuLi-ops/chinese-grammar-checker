@@ -20,9 +20,9 @@ export async function generateMetadata({
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://chinesegrammarchecker.com';
   
   return {
-    // 添加规范链接，指向根域名
+    // 添加规范链接，使用当前页面的语言
     alternates: {
-      canonical: baseUrl,
+      canonical: `${baseUrl}/${locale}`,
     }
   };
 }
