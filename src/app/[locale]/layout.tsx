@@ -23,7 +23,12 @@ export async function generateMetadata({
   const messages = await getMessages();
   
   // 安全地访问元数据
-  const metadata = messages as any;
+  const metadata = messages as {
+    metadata?: {
+      title?: string;
+      description?: string;
+    }
+  };
   
   return {
     title: metadata.metadata?.title || "Chinese Grammar Checker",
