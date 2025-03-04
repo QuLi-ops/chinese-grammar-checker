@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   const t = await getTranslations('blog');
   
   // 构建完整的URL
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://grammar-checker.com';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://chinesegrammarchecker.com';
   const canonicalUrl = `${baseUrl}/${locale}/blog`;
   
   return {

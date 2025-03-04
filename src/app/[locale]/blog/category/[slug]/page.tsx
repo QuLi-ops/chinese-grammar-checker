@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const category = decodeURIComponent(slug);
   
   // 构建完整的URL
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://grammar-checker.com';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://chinesegrammarchecker.com';
   const canonicalUrl = `${baseUrl}/${locale}/blog/category/${slug}`;
   
   return {

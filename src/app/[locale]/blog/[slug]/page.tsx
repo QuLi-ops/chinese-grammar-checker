@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
   
   // 构建完整的URL（需要根据你的实际部署域名调整）
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://grammar-checker.com';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://chinesegrammarchecker.com';
   const canonicalUrl = `${baseUrl}/${locale}/blog/${slug}`;
   
   return {
