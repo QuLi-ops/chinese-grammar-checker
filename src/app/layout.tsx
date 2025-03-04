@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     description: "Advanced AI-powered Chinese grammar checking tool. Perfect for students, professionals, and Chinese learners.",
   },
   alternates: {
-    canonical: 'https://chinesegrammarchecker.com'
+    canonical: 'https://chinesegrammarchecker.com/en'
   }
 };
 
