@@ -4,8 +4,28 @@ import {notFound} from 'next/navigation';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { Metadata } from 'next';
 
 const locales = ['en', 'zh', 'ja'];
+
+// 添加生成元数据的函数
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{locale: string}>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  
+  // 获取基础URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://chinesegrammarchecker.com';
+  
+  return {
+    // 添加规范链接，指向根域名
+    alternates: {
+      canonical: baseUrl,
+    }
+  };
+}
 
 export default async function LocaleLayout({
   children,
