@@ -15,10 +15,6 @@ featured: true
 
 This is my first blog post. Here, I will share various content about Chinese grammar, writing techniques, and language learning.
 
-## About This Blog
-
-This blog system is built using Next.js and Markdown files. It's simple, efficient, and easy to maintain.
-
 ## Upcoming Content
 
 In the upcoming articles, I plan to share:
