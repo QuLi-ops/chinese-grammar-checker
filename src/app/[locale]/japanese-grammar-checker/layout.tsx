@@ -28,7 +28,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       description: t('meta.twitter.description'),
     },
     alternates: {
-      canonical: `https://chinesegrammarchecker.com/${locale}/japanese-grammar-checker`
+      canonical: `https://chinesegrammarchecker.com/${locale}/japanese-grammar-checker`,
+      languages: {
+        'en': `https://chinesegrammarchecker.com/en/japanese-grammar-checker`,
+        'zh': `https://chinesegrammarchecker.com/zh/japanese-grammar-checker`,
+        'ja': `https://chinesegrammarchecker.com/ja/japanese-grammar-checker`
+      }
     }
   };
 }

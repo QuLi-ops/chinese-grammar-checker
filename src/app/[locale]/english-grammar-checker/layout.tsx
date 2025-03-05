@@ -29,7 +29,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       description: t('meta.twitter.description'),
     },
     alternates: {
-      canonical: `https://chinesegrammarchecker.com/${locale}/english-grammar-checker`
+      canonical: `https://chinesegrammarchecker.com/${locale}/english-grammar-checker`,
+      languages: {
+        'en': `https://chinesegrammarchecker.com/en/english-grammar-checker`,
+        'zh': `https://chinesegrammarchecker.com/zh/english-grammar-checker`,
+        'ja': `https://chinesegrammarchecker.com/ja/english-grammar-checker`
+      }
     }
   };
 }

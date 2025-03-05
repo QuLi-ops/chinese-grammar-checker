@@ -47,6 +47,11 @@ export async function generateMetadata({
     // 添加规范链接和语言替代版本
     alternates: {
       canonical: `${baseUrl}/${locale}`,
+      languages: {
+        'en': `${baseUrl}/en`,
+        'zh': `${baseUrl}/zh`,
+        'ja': `${baseUrl}/ja`
+      }
     }
   };
 }
