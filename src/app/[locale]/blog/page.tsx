@@ -49,10 +49,10 @@ export default async function BlogPage({ params }: BlogPageProps) {
   const { locale } = await params;
   const t = await getTranslations('blog');
   
-  // 始终从英文内容获取文章列表
-  const posts = await getAllPosts('en');
-  const categories = await getAllCategories('en');
-  const tags = await getAllTags('en');
+  // 直接从 blog 目录获取文章列表和分类标签
+  const posts = await getAllPosts();
+  const categories = await getAllCategories();
+  const tags = await getAllTags();
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -78,8 +78,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
               {categories.map((category) => (
                 <Link
                   key={category}
-                  href={`/blog/category/${encodeURIComponent(category)}`}
-                  locale={locale}
+                  href={`/${locale}/blog/category/${encodeURIComponent(category)}`}
                   className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full hover:bg-blue-200 transition-colors"
                 >
                   {category}
@@ -94,8 +93,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
               {tags.map((tag) => (
                 <Link
                   key={tag}
-                  href={`/blog/tag/${encodeURIComponent(tag)}`}
-                  locale={locale}
+                  href={`/${locale}/blog/tag/${encodeURIComponent(tag)}`}
                   className="text-sm bg-gray-100 text-gray-800 px-3 py-1 rounded-full hover:bg-gray-200 transition-colors"
                 >
                   #{tag}

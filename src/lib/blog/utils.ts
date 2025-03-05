@@ -18,21 +18,19 @@ export interface BlogPost {
   featured: boolean;
 }
 
-// 获取特定语言的所有博客文章
-export async function getAllPosts(locale: string = 'zh'): Promise<BlogPost[]> {
-  const localeDirectory = path.join(contentDirectory, locale);
-  
+// 获取所有博客文章
+export async function getAllPosts(): Promise<BlogPost[]> {
   // 确保目录存在
-  if (!fs.existsSync(localeDirectory)) {
+  if (!fs.existsSync(contentDirectory)) {
     return [];
   }
   
-  const filenames = fs.readdirSync(localeDirectory);
+  const filenames = fs.readdirSync(contentDirectory);
   
   const posts = filenames
     .filter(filename => filename.endsWith('.md'))
     .map(filename => {
-      const filePath = path.join(localeDirectory, filename);
+      const filePath = path.join(contentDirectory, filename);
       const fileContents = fs.readFileSync(filePath, 'utf8');
       const { data, content } = matter(fileContents);
       
@@ -55,16 +53,14 @@ export async function getAllPosts(locale: string = 'zh'): Promise<BlogPost[]> {
   });
 }
 
-// 获取特定语言的单篇博客文章
-export async function getPostBySlug(slug: string, locale: string = 'zh'): Promise<BlogPost | null> {
-  const localeDirectory = path.join(contentDirectory, locale);
-  
+// 获取单篇博客文章
+export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   // 确保目录存在
-  if (!fs.existsSync(localeDirectory)) {
+  if (!fs.existsSync(contentDirectory)) {
     return null;
   }
   
-  const filenames = fs.readdirSync(localeDirectory);
+  const filenames = fs.readdirSync(contentDirectory);
   
   // 先尝试查找完全匹配的文件名
   let filename = filenames.find(name => name === `${slug}.md`);
@@ -74,7 +70,7 @@ export async function getPostBySlug(slug: string, locale: string = 'zh'): Promis
     for (const name of filenames) {
       if (!name.endsWith('.md')) continue;
       
-      const filePath = path.join(localeDirectory, name);
+      const filePath = path.join(contentDirectory, name);
       const fileContents = fs.readFileSync(filePath, 'utf8');
       const { data } = matter(fileContents);
       
@@ -90,7 +86,7 @@ export async function getPostBySlug(slug: string, locale: string = 'zh'): Promis
     return null;
   }
   
-  const filePath = path.join(localeDirectory, filename);
+  const filePath = path.join(contentDirectory, filename);
   const fileContents = fs.readFileSync(filePath, 'utf8');
   const { data, content } = matter(fileContents);
   
@@ -108,8 +104,8 @@ export async function getPostBySlug(slug: string, locale: string = 'zh'): Promis
 }
 
 // 获取所有分类
-export async function getAllCategories(locale: string = 'zh'): Promise<string[]> {
-  const posts = await getAllPosts(locale);
+export async function getAllCategories(): Promise<string[]> {
+  const posts = await getAllPosts();
   const categoriesSet = new Set<string>();
   
   posts.forEach(post => {
@@ -122,8 +118,8 @@ export async function getAllCategories(locale: string = 'zh'): Promise<string[]>
 }
 
 // 获取所有标签
-export async function getAllTags(locale: string = 'zh'): Promise<string[]> {
-  const posts = await getAllPosts(locale);
+export async function getAllTags(): Promise<string[]> {
+  const posts = await getAllPosts();
   const tagsSet = new Set<string>();
   
   posts.forEach(post => {
@@ -136,13 +132,13 @@ export async function getAllTags(locale: string = 'zh'): Promise<string[]> {
 }
 
 // 按分类获取文章
-export async function getPostsByCategory(category: string, locale: string = 'zh'): Promise<BlogPost[]> {
-  const posts = await getAllPosts(locale);
+export async function getPostsByCategory(category: string): Promise<BlogPost[]> {
+  const posts = await getAllPosts();
   return posts.filter(post => post.categories.includes(category));
 }
 
 // 按标签获取文章
-export async function getPostsByTag(tag: string, locale: string = 'zh'): Promise<BlogPost[]> {
-  const posts = await getAllPosts(locale);
+export async function getPostsByTag(tag: string): Promise<BlogPost[]> {
+  const posts = await getAllPosts();
   return posts.filter(post => post.tags.includes(tag));
 } 

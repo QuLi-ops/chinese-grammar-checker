@@ -16,9 +16,10 @@ export async function generateStaticParams() {
   const locales = ['zh', 'en', 'ja'];
   const paths = [];
 
+  // 直接从 blog 目录获取标签
+  const tags = await getAllTags();
+  
   for (const locale of locales) {
-    const tags = await getAllTags(locale);
-    
     for (const tag of tags) {
       paths.push({
         locale,
@@ -66,15 +67,14 @@ export default async function TagPage({ params }: TagPageProps) {
   const t = await getTranslations('blog');
   const tag = decodeURIComponent(slug);
   
-  // 始终从英文内容获取文章
-  const posts = await getPostsByTag(slug, 'en');
+  // 直接从 blog 目录获取文章
+  const posts = await getPostsByTag(slug);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <Link 
-          href="/blog" 
-          locale={locale}
+          href={`/${locale}/blog`}
           className="text-blue-600 hover:text-blue-800 transition-colors"
         >
           ← {t('backToBlog')}

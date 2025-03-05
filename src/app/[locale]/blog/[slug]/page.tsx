@@ -17,8 +17,8 @@ export async function generateStaticParams() {
   const locales = ['zh', 'en', 'ja'];
   const paths = [];
 
-  // 只获取英文文章列表，为所有语言生成路由
-  const posts = await getAllPosts('en');
+  // 直接从 blog 目录获取文章列表
+  const posts = await getAllPosts();
   
   for (const locale of locales) {
     for (const post of posts) {
@@ -34,10 +34,9 @@ export async function generateStaticParams() {
 
 // 生成SEO元数据
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  // 在 Next.js 15 中，params 是一个 Promise
   const { locale, slug } = await params;
-  // 始终从英文内容获取文章
-  const post = await getPostBySlug(slug, 'en');
+  // 直接从 blog 目录获取文章
+  const post = await getPostBySlug(slug);
   
   if (!post) {
     return {
@@ -81,8 +80,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { locale, slug } = await params;
   const t = await getTranslations('blog');
-  // 始终从英文内容获取文章
-  const post = await getPostBySlug(slug, 'en');
+  // 直接从 blog 目录获取文章
+  const post = await getPostBySlug(slug);
   
   if (!post) {
     notFound();
@@ -92,8 +91,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <Link 
-          href="/blog" 
-          locale={locale}
+          href={`/${locale}/blog`}
           className="text-blue-600 hover:text-blue-800 transition-colors"
         >
           ← {t('backToBlog')}

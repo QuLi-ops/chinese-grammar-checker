@@ -56,9 +56,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.8,
     });
-    
+  }
+  
+  // 获取所有博客文章（只需获取一次，因为内容是共享的）
+  const posts = await getAllPosts();
+  const categories = await getAllCategories();
+  const tags = await getAllTags();
+
+  // 为每种语言生成博客文章的 URL
+  for (const locale of locales) {
     // 博客文章
-    const posts = await getAllPosts(locale);
     for (const post of posts) {
       entries.push({
         url: `${baseUrl}/${locale}/blog/${post.slug}`,
@@ -69,7 +76,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
     
     // 分类页面
-    const categories = await getAllCategories(locale);
     for (const category of categories) {
       entries.push({
         url: `${baseUrl}/${locale}/blog/category/${encodeURIComponent(category)}`,
@@ -80,7 +86,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
     
     // 标签页面
-    const tags = await getAllTags(locale);
     for (const tag of tags) {
       entries.push({
         url: `${baseUrl}/${locale}/blog/tag/${encodeURIComponent(tag)}`,
