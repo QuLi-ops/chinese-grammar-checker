@@ -68,7 +68,6 @@ export default async function TagPage({ params }: TagPageProps) {
   
   // 始终从英文内容获取文章
   const posts = await getPostsByTag(slug, 'en');
-  const tags = await getAllTags('en');
 
   return (
     <div className="container mx-auto px-4 py-8">
