@@ -62,11 +62,13 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  // 在 Next.js 15 中，params 是一个 Promise
   const { locale, slug } = await params;
   const t = await getTranslations('blog');
   const category = decodeURIComponent(slug);
-  const posts = await getPostsByCategory(category, locale);
+  
+  // 始终从英文内容获取文章
+  const posts = await getPostsByCategory(slug, 'en');
+  const categories = await getAllCategories('en');
 
   return (
     <div className="container mx-auto px-4 py-8">

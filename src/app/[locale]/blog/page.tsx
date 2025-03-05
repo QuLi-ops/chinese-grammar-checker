@@ -46,12 +46,13 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 }
 
 export default async function BlogPage({ params }: BlogPageProps) {
-  // 确保 locale 是有效的，在 Next.js 15 中，params 是一个 Promise
   const { locale } = await params;
   const t = await getTranslations('blog');
-  const posts = await getAllPosts(locale);
-  const categories = await getAllCategories(locale);
-  const tags = await getAllTags(locale);
+  
+  // 始终从英文内容获取文章列表
+  const posts = await getAllPosts('en');
+  const categories = await getAllCategories('en');
+  const tags = await getAllTags('en');
 
   return (
     <div className="container mx-auto px-4 py-8">

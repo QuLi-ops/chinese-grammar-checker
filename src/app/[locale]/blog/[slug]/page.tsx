@@ -17,9 +17,10 @@ export async function generateStaticParams() {
   const locales = ['zh', 'en', 'ja'];
   const paths = [];
 
+  // 只获取英文文章列表，为所有语言生成路由
+  const posts = await getAllPosts('en');
+  
   for (const locale of locales) {
-    const posts = await getAllPosts(locale);
-    
     for (const post of posts) {
       paths.push({
         locale,
@@ -35,7 +36,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   // 在 Next.js 15 中，params 是一个 Promise
   const { locale, slug } = await params;
-  const post = await getPostBySlug(slug, locale);
+  // 始终从英文内容获取文章
+  const post = await getPostBySlug(slug, 'en');
   
   if (!post) {
     return {
@@ -77,10 +79,10 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  // 在 Next.js 15 中，params 是一个 Promise
   const { locale, slug } = await params;
   const t = await getTranslations('blog');
-  const post = await getPostBySlug(slug, locale);
+  // 始终从英文内容获取文章
+  const post = await getPostBySlug(slug, 'en');
   
   if (!post) {
     notFound();

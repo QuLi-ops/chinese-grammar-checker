@@ -62,11 +62,13 @@ export async function generateMetadata({ params }: TagPageProps): Promise<Metada
 }
 
 export default async function TagPage({ params }: TagPageProps) {
-  // 在 Next.js 15 中，params 是一个 Promise
   const { locale, slug } = await params;
   const t = await getTranslations('blog');
   const tag = decodeURIComponent(slug);
-  const posts = await getPostsByTag(tag, locale);
+  
+  // 始终从英文内容获取文章
+  const posts = await getPostsByTag(slug, 'en');
+  const tags = await getAllTags('en');
 
   return (
     <div className="container mx-auto px-4 py-8">
