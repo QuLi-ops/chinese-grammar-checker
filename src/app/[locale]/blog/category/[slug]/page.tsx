@@ -47,6 +47,11 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     description: `${t('categoryTitle', { category })} - Grammar Checker - 浏览${category}分类下的所有文章`,
     alternates: {
       canonical: canonicalUrl,
+      languages: {
+        'en': `${baseUrl}/en/blog/category/${slug}`,
+        'zh': `${baseUrl}/zh/blog/category/${slug}`,
+        'ja': `${baseUrl}/ja/blog/category/${slug}`,
+      }
     },
     openGraph: {
       title: `${t('categoryTitle', { category })} - Grammar Checker`,

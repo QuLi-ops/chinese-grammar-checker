@@ -47,6 +47,11 @@ export async function generateMetadata({ params }: TagPageProps): Promise<Metada
     description: `${t('tagTitle', { tag })} - Grammar Checker - 浏览标签为${tag}的所有文章`,
     alternates: {
       canonical: canonicalUrl,
+      languages: {
+        'en': `${baseUrl}/en/blog/tag/${slug}`,
+        'zh': `${baseUrl}/zh/blog/tag/${slug}`,
+        'ja': `${baseUrl}/ja/blog/tag/${slug}`,
+      }
     },
     openGraph: {
       title: `${t('tagTitle', { tag })} - Grammar Checker`,
