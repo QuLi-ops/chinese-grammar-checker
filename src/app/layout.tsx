@@ -56,11 +56,6 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://chinesegrammarchecker.com/en',
-    languages: {
-      'en': 'https://chinesegrammarchecker.com/en',
-      'zh': 'https://chinesegrammarchecker.com/zh',
-      'ja': 'https://chinesegrammarchecker.com/ja'
-    }
   }
 };
 
@@ -73,14 +68,10 @@ export default function RootLayout({
   const loadGA = shouldLoadGA();
   
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-        {/* 条件性加载 Google Analytics */}
-        {loadGA && <GoogleAnalytics gaId="G-FWFPJ6YBJZ" />}
-      </body>
-    </html>
+    <>
+      {children}
+      {/* 条件性加载 Google Analytics */}
+      {loadGA && <GoogleAnalytics gaId="G-FWFPJ6YBJZ" />}
+    </>
   );
 }
