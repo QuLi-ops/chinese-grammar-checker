@@ -6,24 +6,26 @@ const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const LOGS_API_URL = 'https://chinese-grammar-checker.quli1016908036.workers.dev/api/logs';
 const LOGS_API_TOKEN = 'my-secure-api-logs-token-2025';
 
+// 定义错误解释的接口
+interface ErrorExplanation {
+  error_id: string;
+  error_text: string;
+  explanation: string;
+}
+
 // 定义日志数据接口
 interface LogData {
   rawContent: string;
   markedText?: string;
-  explanations?: any;
+  explanations?: ErrorExplanation[];
   correctedText?: string;
-  result?: any;
-}
-
-// 获取北京时间的ISO字符串
-function getBeijingTime(): string {
-  const now = new Date();
-  // 获取UTC时间的毫秒数
-  const utcTime = now.getTime();
-  // 北京时间比UTC早8小时，所以加上8小时的毫秒数
-  const beijingTime = new Date(utcTime + 8 * 60 * 60 * 1000);
-  // 返回ISO格式的字符串
-  return beijingTime.toISOString();
+  result?: {
+    style?: string;
+    responseLanguage?: string;
+    isCorrect?: boolean;
+    text?: string;
+    error?: string;
+  };
 }
 
 // 发送日志到 Cloudflare Worker
@@ -80,20 +82,17 @@ Your task is to:
 }
 
 export async function POST(request: NextRequest) {
-  // 记录请求开始时间
-  const startTime = Date.now();
-  
-  // 创建日志对象，将在整个处理过程中逐步填充
-  const logData: LogData = {
-    rawContent: ''  // 初始化为空字符串，稍后会填充
-  };
-  
   if (!OPENROUTER_API_KEY) {
     return NextResponse.json(
       { error: 'OpenRouter API key not configured' },
       { status: 500 }
     );
   }
+
+  // 创建日志对象，将在整个处理过程中逐步填充
+  const logData: LogData = {
+    rawContent: ''  // 初始化为空字符串，稍后会填充
+  };
 
   try {
     const body = await request.json();
