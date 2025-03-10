@@ -15,10 +15,11 @@ interface ErrorExplanation {
 
 // 定义日志数据接口
 interface LogData {
-  rawContent: string;
-  markedText?: string;
-  explanations?: ErrorExplanation[];
-  correctedText?: string;
+  inputText: string;     // 用户输入的原始文本
+  rawContent?: string;   // AI的原始响应
+  markedText?: string;   // 标记错误的文本
+  explanations?: ErrorExplanation[];  // 错误解释
+  correctedText?: string;  // 修正后的文本
   result?: {
     style?: string;
     responseLanguage?: string;
@@ -91,15 +92,15 @@ export async function POST(request: NextRequest) {
 
   // 创建日志对象，将在整个处理过程中逐步填充
   const logData: LogData = {
-    rawContent: ''  // 初始化为空字符串，稍后会填充
+    inputText: ''  // 初始化为空字符串，稍后会填充
   };
 
   try {
     const body = await request.json();
     const { text, style, responseLanguage } = body;
     
-    // 记录原始文本
-    logData.rawContent = text;
+    // 记录用户输入的文本
+    logData.inputText = text;
     logData.result = { style, responseLanguage };
 
     const messages = constructPrompt(text, style, responseLanguage);
@@ -182,6 +183,9 @@ export async function POST(request: NextRequest) {
       const rawContent = data.choices[0].message.content.trim();
       console.log('\n=== AI Raw Response ===');
       console.log(rawContent);
+      
+      // 记录AI的原始响应
+      logData.rawContent = rawContent;
       
       llmResponse = JSON.parse(rawContent);
       

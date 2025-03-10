@@ -33,11 +33,12 @@ async function ensureLogTableExists(db: D1Database): Promise<void> {
       CREATE TABLE IF NOT EXISTS logs (
         id TEXT PRIMARY KEY,
         clientIP TEXT,
-        rawContent TEXT,
-        markedText TEXT,
-        explanations TEXT,
-        correctedText TEXT,
-        result TEXT,
+        inputText TEXT,        -- 用户输入的原始文本
+        rawContent TEXT,       -- AI的原始响应
+        markedText TEXT,       -- 标记错误的文本
+        explanations TEXT,     -- 错误解释(JSON格式)
+        correctedText TEXT,    -- 修正后的文本
+        result TEXT,          -- 最终结果(JSON格式)
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
@@ -54,6 +55,7 @@ async function writeLogToD1(db: D1Database, logId: string, logEntry: any): Promi
     // 将对象转换为适合SQL插入的格式
     const {
       clientIP,
+      inputText,
       rawContent,
       markedText,
       explanations,
@@ -67,11 +69,12 @@ async function writeLogToD1(db: D1Database, logId: string, logEntry: any): Promi
 
     await db.prepare(`
       INSERT INTO logs (
-        id, clientIP, rawContent, markedText, explanations, correctedText, result
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        id, clientIP, inputText, rawContent, markedText, explanations, correctedText, result
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `).bind(
       logId,
       clientIP || null,
+      inputText || null,
       rawContent || null,
       markedText || null,
       explanationsStr,
@@ -118,7 +121,8 @@ export default {
         const testId = 'test-' + Date.now();
         const testEntry = {
           clientIP: request.headers.get('CF-Connecting-IP') || '未知',
-          rawContent: '这是测试内容',
+          inputText: '这是测试输入',
+          rawContent: '这是AI的原始响应',
           markedText: '这是<mark>测试</mark>内容',
           explanations: { test: '这是测试解释' },
           correctedText: '这是测试内容',
@@ -172,6 +176,7 @@ export default {
           // 添加额外的日志信息
           const logEntry = {
             clientIP,
+            inputText: data.inputText,
             rawContent: data.rawContent,
             markedText: data.markedText,
             explanations: data.explanations,
