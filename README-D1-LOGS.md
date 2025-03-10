@@ -62,34 +62,25 @@ wrangler deploy
 | 字段名 | 类型 | 描述 |
 |-------|------|------|
 | id | TEXT | 主键，唯一标识符 |
-| timestamp | TEXT | 日志时间戳 |
-| path | TEXT | 请求路径 |
-| method | TEXT | HTTP方法 |
 | clientIP | TEXT | 客户端IP地址 |
-| userAgent | TEXT | 用户代理 |
-| type | TEXT | 日志类型(ai_raw_response/ai_parsed_response/final_result) |
-| rawContent | TEXT | AI原始响应内容(仅ai_raw_response类型) |
-| markedText | TEXT | 标记错误的文本(仅ai_parsed_response类型) |
-| explanations | TEXT | 错误解释(JSON格式，仅ai_parsed_response类型) |
-| correctedText | TEXT | 修正后的文本(仅ai_parsed_response类型) |
-| result | TEXT | 最终结果(JSON格式，仅final_result类型) |
-| processingTime | INTEGER | 处理时间(毫秒) |
+| rawContent | TEXT | 原始文本内容 |
+| markedText | TEXT | 标记错误的文本 |
+| explanations | TEXT | 错误解释(JSON格式) |
+| correctedText | TEXT | 修正后的文本 |
+| result | TEXT | 结果(JSON格式) |
 | created_at | TIMESTAMP | 记录创建时间 |
 
 ## 查询日志
 
 可以通过`/api/logs`端点查询日志，支持以下查询参数：
 
-- `limit`: 返回的最大记录数(默认100，最大1000)
+- `limit`: 返回的最大记录数(默认100)
 - `offset`: 分页偏移量(默认0)
-- `type`: 按日志类型筛选(ai_raw_response/ai_parsed_response/final_result)
-- `startDate`: 开始日期(ISO格式)
-- `endDate`: 结束日期(ISO格式)
 
 示例请求：
 
 ```
-GET /api/logs?limit=50&offset=0&type=ai_raw_response&startDate=2023-01-01T00:00:00Z
+GET /api/logs?limit=50&offset=0
 ```
 
 ## 测试D1连接

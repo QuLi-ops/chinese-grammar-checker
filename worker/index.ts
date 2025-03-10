@@ -32,19 +32,12 @@ async function ensureLogTableExists(db: D1Database): Promise<void> {
     await db.exec(`
       CREATE TABLE IF NOT EXISTS logs (
         id TEXT PRIMARY KEY,
-        timestamp TEXT NOT NULL,
-        beijingTimestamp TEXT,
-        path TEXT,
-        method TEXT,
         clientIP TEXT,
-        userAgent TEXT,
-        type TEXT,
         rawContent TEXT,
         markedText TEXT,
         explanations TEXT,
         correctedText TEXT,
         result TEXT,
-        processingTime INTEGER,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
@@ -60,19 +53,12 @@ async function writeLogToD1(db: D1Database, logId: string, logEntry: any): Promi
   try {
     // 将对象转换为适合SQL插入的格式
     const {
-      timestamp,
-      beijingTimestamp,
-      path,
-      method,
       clientIP,
-      userAgent,
-      type,
       rawContent,
       markedText,
       explanations,
       correctedText,
-      result,
-      processingTime
+      result
     } = logEntry;
 
     // 将对象转换为JSON字符串
@@ -81,29 +67,21 @@ async function writeLogToD1(db: D1Database, logId: string, logEntry: any): Promi
 
     await db.prepare(`
       INSERT INTO logs (
-        id, timestamp, beijingTimestamp, path, method, clientIP, userAgent, 
-        type, rawContent, markedText, explanations, correctedText, result, processingTime
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        id, clientIP, rawContent, markedText, explanations, correctedText, result
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
     `).bind(
       logId,
-      timestamp || new Date().toISOString(),
-      beijingTimestamp || getBeijingTime(),
-      path || null,
-      method || null,
       clientIP || null,
-      userAgent || null,
-      type || null,
       rawContent || null,
       markedText || null,
       explanationsStr,
       correctedText || null,
-      resultStr,
-      processingTime || null
+      resultStr
     ).run();
-
-    console.log(`成功写入日志到D1，ID: ${logId}`);
+    
+    console.log(`日志已写入D1，ID: ${logId}`);
   } catch (error) {
-    console.error(`写入日志到D1失败:`, error);
+    console.error(`写入日志到D1时出错:`, error);
     throw error;
   }
 }
@@ -139,14 +117,12 @@ export default {
       try {
         const testId = 'test-' + Date.now();
         const testEntry = {
-          timestamp: new Date().toISOString(),
-          beijingTimestamp: getBeijingTime(),
-          path: '/api/test-d1',
-          method: 'GET',
-          clientIP,
-          userAgent,
-          type: 'test',
-          processingTime: 0
+          clientIP: request.headers.get('CF-Connecting-IP') || '未知',
+          rawContent: '这是测试内容',
+          markedText: '这是<mark>测试</mark>内容',
+          explanations: { test: '这是测试解释' },
+          correctedText: '这是测试内容',
+          result: { success: true }
         };
         
         console.log(`测试D1写入，ID: ${testId}`);
@@ -195,23 +171,13 @@ export default {
           
           // 添加额外的日志信息
           const logEntry = {
-            timestamp: new Date().toISOString(),
-            beijingTimestamp: data.beijingTimestamp || getBeijingTime(),
             clientIP,
-            userAgent,
-            ...data
+            rawContent: data.rawContent,
+            markedText: data.markedText,
+            explanations: data.explanations,
+            correctedText: data.correctedText,
+            result: data.result
           };
-          
-          // 只处理三种类型的日志
-          if (!['ai_raw_response', 'ai_parsed_response', 'final_result'].includes(logEntry.type)) {
-            return new Response(JSON.stringify({ 
-              success: false, 
-              message: 'Unsupported log type'
-            }), {
-              status: 400,
-              headers: { 'Content-Type': 'application/json' }
-            });
-          }
           
           // 生成日志ID并存储日志
           const logId = generateLogId();
@@ -259,50 +225,18 @@ export default {
         // 获取查询参数
         const limit = parseInt(url.searchParams.get('limit') || '100');
         const offset = parseInt(url.searchParams.get('offset') || '0');
-        const type = url.searchParams.get('type');
-        const startDate = url.searchParams.get('startDate');
-        const endDate = url.searchParams.get('endDate');
-        const useBeijingTime = url.searchParams.get('useBeijingTime') === 'true';
         
         // 构建SQL查询
         let sql = `SELECT * FROM logs`;
         const conditions = [];
         const params = [];
         
-        if (type) {
-          conditions.push(`type = ?`);
-          params.push(type);
-        }
+        // 移除type, startDate, endDate等条件检查，因为相关字段已被移除
+        // 只保留limit和offset参数
         
-        if (startDate) {
-          if (useBeijingTime) {
-            conditions.push(`beijingTimestamp >= ?`);
-          } else {
-            conditions.push(`timestamp >= ?`);
-          }
-          params.push(startDate);
-        }
-        
-        if (endDate) {
-          if (useBeijingTime) {
-            conditions.push(`beijingTimestamp <= ?`);
-          } else {
-            conditions.push(`timestamp <= ?`);
-          }
-          params.push(endDate);
-        }
-        
-        if (conditions.length > 0) {
-          sql += ` WHERE ` + conditions.join(' AND ');
-        }
-        
-        if (useBeijingTime) {
-          sql += ` ORDER BY beijingTimestamp DESC LIMIT ? OFFSET ?`;
-        } else {
-          sql += ` ORDER BY timestamp DESC LIMIT ? OFFSET ?`;
-        }
-        params.push(Math.min(limit, 1000)); // 限制最大返回数量
-        params.push(offset);
+        // 更新排序方式
+        sql += ` ORDER BY created_at DESC LIMIT ? OFFSET ?`;
+        params.push(limit, offset);
         
         console.log(`执行SQL查询:`, sql, params);
         

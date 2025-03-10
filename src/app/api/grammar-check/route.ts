@@ -8,10 +8,11 @@ const LOGS_API_TOKEN = 'my-secure-api-logs-token-2025';
 
 // 定义日志数据接口
 interface LogData {
-  type: string;
-  path: string;
-  processingTime: number;
-  [key: string]: unknown;
+  rawContent: string;
+  markedText?: string;
+  explanations?: any;
+  correctedText?: string;
+  result?: any;
 }
 
 // 获取北京时间的ISO字符串
@@ -30,19 +31,13 @@ async function sendLogToCloudflare(logData: LogData) {
   try {
     console.log('正在发送日志到 Cloudflare Worker:', logData);
     
-    // 添加北京时间时间戳
-    const logWithTimestamp = {
-      ...logData,
-      beijingTimestamp: getBeijingTime()
-    };
-    
     const response = await fetch(LOGS_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${LOGS_API_TOKEN}`
       },
-      body: JSON.stringify(logWithTimestamp)
+      body: JSON.stringify(logData)
     });
     
     if (!response.ok) {
@@ -88,6 +83,11 @@ export async function POST(request: NextRequest) {
   // 记录请求开始时间
   const startTime = Date.now();
   
+  // 创建日志对象，将在整个处理过程中逐步填充
+  const logData: LogData = {
+    rawContent: ''  // 初始化为空字符串，稍后会填充
+  };
+  
   if (!OPENROUTER_API_KEY) {
     return NextResponse.json(
       { error: 'OpenRouter API key not configured' },
@@ -98,6 +98,10 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { text, style, responseLanguage } = body;
+    
+    // 记录原始文本
+    logData.rawContent = text;
+    logData.result = { style, responseLanguage };
 
     const messages = constructPrompt(text, style, responseLanguage);
 
@@ -180,14 +184,6 @@ export async function POST(request: NextRequest) {
       console.log('\n=== AI Raw Response ===');
       console.log(rawContent);
       
-      // 记录 AI 原始响应日志
-      sendLogToCloudflare({
-        type: 'ai_raw_response',
-        path: '/api/grammar-check',
-        rawContent: rawContent,
-        processingTime: Date.now() - startTime
-      });
-      
       llmResponse = JSON.parse(rawContent);
       
       console.log('\n=== Parsed AI Response ===');
@@ -196,16 +192,10 @@ export async function POST(request: NextRequest) {
       console.log('Explanations:', llmResponse.explanations);
       console.log('Corrected Text:', llmResponse.correctedText);
       
-      // 记录解析后的 AI 响应日志
-      sendLogToCloudflare({
-        type: 'ai_parsed_response',
-        path: '/api/grammar-check',
-        isCorrect: llmResponse.isCorrect,
-        markedText: llmResponse.text,
-        explanations: llmResponse.explanations,
-        correctedText: llmResponse.correctedText,
-        processingTime: Date.now() - startTime
-      });
+      // 更新日志数据
+      logData.markedText = llmResponse.text;
+      logData.explanations = llmResponse.explanations;
+      logData.correctedText = llmResponse.correctedText;
     } catch (e) {
       console.error('\n=== JSON Parse Error ===');
       console.error('Error:', e);
@@ -258,17 +248,21 @@ export async function POST(request: NextRequest) {
     console.log(JSON.stringify(finalResult, null, 2));
     console.log('\n===================\n');
 
-    // 记录最终结果日志
-    sendLogToCloudflare({
-      type: 'final_result',
-      path: '/api/grammar-check',
-      result: finalResult,
-      processingTime: Date.now() - startTime
-    });
+    // 更新最终结果
+    logData.result = finalResult;
+    
+    // 只在处理完成后发送一次日志
+    await sendLogToCloudflare(logData);
 
     return NextResponse.json(finalResult);
   } catch (error: unknown) {
     console.error('Error during grammar check:', error);
+    
+    // 发送错误日志
+    if (logData.rawContent) {
+      logData.result = { error: error instanceof Error ? error.message : 'Unknown error' };
+      await sendLogToCloudflare(logData);
+    }
     
     return NextResponse.json(
       { error: `Error during grammar check: ${error instanceof Error ? error.message : 'Unknown error'}` },

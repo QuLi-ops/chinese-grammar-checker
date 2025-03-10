@@ -49,44 +49,47 @@ async function writeBatchToD1(batch) {
   // 创建SQL插入语句
   let sql = '';
   for (const log of batch) {
-    if (!log.value) continue;
+    const value = await getKVValue(log.key);
+    if (!value) continue;
     
-    const {
-      id,
-      timestamp,
-      path,
-      method,
+    // 解析日志数据
+    let {
       clientIP,
-      userAgent,
-      status,
-      message,
-      requestData,
-      error,
-      source,
-      processingTime
-    } = log.value;
+      rawContent,
+      markedText,
+      explanations,
+      correctedText,
+      result
+    } = value;
+    
+    // 兼容旧格式的日志
+    if (value.type === 'ai_raw_response') {
+      rawContent = value.rawContent || value.content;
+      result = { type: 'ai_raw_response' };
+    } else if (value.type === 'ai_parsed_response') {
+      rawContent = value.rawContent || value.content;
+      markedText = value.markedText || value.text;
+      explanations = value.explanations;
+      correctedText = value.correctedText;
+      result = { type: 'ai_parsed_response' };
+    } else if (value.type === 'final_result') {
+      result = value.result || { type: 'final_result' };
+    }
     
     // 处理可能的NULL值和转义字符串
     const safeStr = (str) => str ? `'${str.replace(/'/g, "''")}'` : 'NULL';
     const safeJson = (obj) => obj ? `'${JSON.stringify(obj).replace(/'/g, "''")}'` : 'NULL';
-    const safeNum = (num) => num !== undefined && num !== null ? num : 'NULL';
     
     sql += `INSERT OR IGNORE INTO logs (
-      id, timestamp, path, method, clientIP, userAgent, 
-      status, message, requestData, error, source, processingTime
+      id, clientIP, rawContent, markedText, explanations, correctedText, result
     ) VALUES (
       '${log.key}',
-      ${safeStr(timestamp)},
-      ${safeStr(path)},
-      ${safeStr(method)},
       ${safeStr(clientIP)},
-      ${safeStr(userAgent)},
-      ${safeNum(status)},
-      ${safeStr(message)},
-      ${safeJson(requestData)},
-      ${safeStr(error)},
-      ${safeStr(source)},
-      ${safeNum(processingTime)}
+      ${safeStr(rawContent)},
+      ${safeStr(markedText)},
+      ${safeJson(explanations)},
+      ${safeStr(correctedText)},
+      ${safeJson(result)}
     );\n`;
   }
   
@@ -126,22 +129,12 @@ async function migrateKVToD1() {
   for (let i = 0; i < batches.length; i++) {
     console.log(`处理批次 ${i + 1}/${batches.length}...`);
     
-    // 获取每个键的值
-    const batch = [];
-    for (const key of batches[i]) {
-      const value = await getKVValue(key.name);
-      batch.push({
-        key: key.name,
-        value: value
-      });
-    }
-    
     // 写入D1
-    const success = await writeBatchToD1(batch);
+    const success = await writeBatchToD1(batches[i]);
     if (success) {
-      successCount += batch.length;
+      successCount += batches[i].length;
     } else {
-      failCount += batch.length;
+      failCount += batches[i].length;
     }
   }
   

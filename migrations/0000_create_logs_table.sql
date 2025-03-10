@@ -11,4 +11,4 @@ CREATE TABLE IF NOT EXISTS logs (
 );
 
 -- 创建索引以提高查询性能
-CREATE INDEX IF NOT EXISTS idx_logs_created_at ON logs (created_at); 
+CREATE INDEX IF NOT EXISTS idx_logs_created_at ON logs (created_at);
