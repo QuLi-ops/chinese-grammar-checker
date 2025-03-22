@@ -11,7 +11,7 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: '*',
-        disallow: ['/*/blog/category/*', '/*/blog/tag/*'],
+        disallow: ['/*/blog/category/*', '/*/blog/tag/*', '/*/blog$'],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

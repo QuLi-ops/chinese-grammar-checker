@@ -40,14 +40,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.8,
     });
-    
-    // 博客主页
-    entries.push({
-      url: `${baseUrl}/${locale}/blog`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    });
   }
   
   // 获取所有博客文章（只需获取一次，因为内容是共享的）
