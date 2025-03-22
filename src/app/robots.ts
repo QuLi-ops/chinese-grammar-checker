@@ -9,6 +9,10 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
       },
+      {
+        userAgent: '*',
+        disallow: ['/*/blog/category/*', '/*/blog/tag/*'],
+      },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
   };
