@@ -13,6 +13,7 @@
     "db:migrate-kv": "node scripts/migrate-kv-to-d1.js"
   },
   "dependencies": {
+    "@microsoft/clarity": "^1.0.0",
     "@next/third-parties": "^15.1.7",
     "@radix-ui/react-dropdown-menu": "^2.1.6",
     "@radix-ui/react-label": "^2.1.2",

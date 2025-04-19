@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { GoogleAnalytics } from '@next/third-parties/google'
 import "./globals.css";
-
+import ClarityScript from "../components/analytics/ClarityScript";
 
 // 确定是否应该加载 Google Analytics
 const shouldLoadGA = () => {
@@ -62,6 +62,8 @@ export default function RootLayout({
       {children}
       {/* 条件性加载 Google Analytics */}
       {loadGA && <GoogleAnalytics gaId="G-FWFPJ6YBJZ" />}
+      {/* 条件性加载 Microsoft Clarity */}
+      {loadGA && <ClarityScript projectId="r6i29taa1m" />}
     </>
   );
 }
